@@ -1,7 +1,7 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 
-namespace Apps.Matecat.Models.Response.Job;
+namespace Apps.Matecat.Models.Response.TranslationIssue;
 
 public class TranslationIssue
 {

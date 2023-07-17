@@ -1,6 +1,6 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 
-namespace Apps.Matecat.Models.Request.Job;
+namespace Apps.Matecat.Models.Request.TranslationIssue;
 
 public class TranslationIssueRequest
 {

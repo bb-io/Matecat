@@ -1,7 +1,7 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 
-namespace Apps.Matecat.Models.Request.Job;
+namespace Apps.Matecat.Models.Request.TranslationIssue;
 
 public class AddTranslationIssueCommentRequest : TranslationIssueRequest
 {
@@ -18,6 +18,6 @@ public class AddTranslationIssueCommentRequest : TranslationIssueRequest
     public string SourcePage { get; set; }
 
     [JsonProperty("uid")]
-    [Display("Uid")]
+    [Display("UID")]
     public string Uid { get; set; }
 }

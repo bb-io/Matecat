@@ -22,4 +22,10 @@ public class ApiEndpoints
     public const string Translation = V2 + "/translation";
 
     #endregion
+
+    #region Teams
+
+    public const string Teams = V2 + "/teams";
+
+    #endregion
 }
