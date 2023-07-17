@@ -17,12 +17,9 @@ public class ConnectionDefinition : IConnectionDefinition
             {
                 new(CredsNames.ApiKey)
                 {
-                    DisplayName = "API Key"
+                    DisplayName = "API Key",
+                    Description = "Your Matecat API key and secret seperated by dash"
                 },
-                new(CredsNames.ApiSecret)
-                {
-                    DisplayName = "API Secret"
-                }
             }
         }
     };
@@ -32,9 +29,5 @@ public class ConnectionDefinition : IConnectionDefinition
     {
         var key = values.First(x => x.Key == CredsNames.ApiKey);
         yield return new(AuthenticationCredentialsRequestLocation.None, key.Key, key.Value);
-
-        var secret = values.First(x => x.Key == CredsNames.ApiSecret);
-        yield return new(AuthenticationCredentialsRequestLocation.None, secret.Key, secret.Value);
-        
     }
 }

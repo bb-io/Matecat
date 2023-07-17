@@ -31,7 +31,7 @@ public class TranslationIssueActions
     #region Actions
 
     [Action("Get translation issues", Description = "Gets project translation issues")]
-    public async Task<TranslationIssuesResponse> GetTranslationIssues(
+    public Task<TranslationIssuesResponse> GetTranslationIssues(
         IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
@@ -39,9 +39,7 @@ public class TranslationIssueActions
         var endpoint = $"{ApiEndpoints.Jobs}/{jobId}/translation-issues";
         var request = new MatecatRequest(endpoint, Method.Get, creds);
 
-        var response = await _client.ExecuteWithHandling<List<TranslationIssue>>(request);
-
-        return new(response);
+        return _client.ExecuteWithHandling<TranslationIssuesResponse>(request);
     }
 
     [Action("Create translation issue", Description = "Create project translation issue")]
@@ -49,8 +47,8 @@ public class TranslationIssueActions
         IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] CreateTranslationIssueRequest requestData)
     {
-        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.IdJob}/{requestData.Password}/segments"
-                       + $"/{requestData.IdSegment}/translation-issues";
+        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
+                       + $"/{requestData.SegmentId}/translation-issues";
 
         var request = new MatecatRequest(endpoint, Method.Post, creds)
             .WithFormData(requestData);
@@ -72,7 +70,7 @@ public class TranslationIssueActions
     }
 
     [Action("Get translation issue comments", Description = "Get project translation issue comments")]
-    public Task<object> GetTranslationIssueComments(
+    public Task<TranslationIssueCommentsResponse> GetTranslationIssueComments(
         IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] TranslationIssueRequest requestData)
     {
@@ -81,23 +79,22 @@ public class TranslationIssueActions
 
         var request = new MatecatRequest(endpoint, Method.Get, creds);
 
-        //TODO: Add deserialization model
-        return _client.ExecuteWithHandling<object>(request);
+        return _client.ExecuteWithHandling<TranslationIssueCommentsResponse>(request);
     }
 
     [Action("Add translation issue comment", Description = "Add project translation issue comment")]
-    public Task<object> AddTranslationIssueCommentRequest(
+    public async Task<TranslationIssueCommentV3> AddTranslationIssueCommentRequest(
         IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] AddTranslationIssueCommentRequest requestData)
     {
-        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/segments"
+        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
                        + $"/{requestData.SegmentId}/translation-issues/{requestData.IssueId}/comments";
 
         var request = new MatecatRequest(endpoint, Method.Post, creds)
             .WithFormData(requestData);
 
-        //TODO: Add deserialization model
-        return _client.ExecuteWithHandling<object>(request);
+        var response = await _client.ExecuteWithHandling<TranslationIssueCommentResponse>(request);
+        return response.Comment;
     }
 
     #endregion

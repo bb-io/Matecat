@@ -12,8 +12,6 @@ public class MatecatRequest : RestRequest
         IEnumerable<AuthenticationCredentialsProvider> creds) : base(endpoint, method)
     {
         var key = creds.First(x => x.KeyName == CredsNames.ApiKey).Value;
-        var secret = creds.First(x => x.KeyName == CredsNames.ApiSecret).Value;
-
-        this.AddHeader("x-matecat-key", $"{key}-{secret}");
+        this.AddHeader("x-matecat-key", key);
     }
 }

@@ -9,7 +9,7 @@ public static class ObjectExtensions
     {
         var json = JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
         {
-            Converters = {new StringValueConverter()}
+            Converters = { new StringValueConverter() }
         });
         return JsonConvert.DeserializeObject<Dictionary<string, string>>(json)!;
     }

@@ -3,21 +3,38 @@ using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Request.TranslationIssue;
 
-public class AddTranslationIssueCommentRequest : TranslationIssueRequest
+public class AddTranslationIssueCommentRequest
 {
+    [JsonProperty("id_job")]
+    [Display("Job ID")]
+    public long JobId { get; set; } 
+    
+    [JsonProperty("password")]
+    [Display("Job password")]
+    public string Password { get; set; }    
+    
+    [JsonProperty("id_segment")]
+    [Display("Segment ID")]
+    public long SegmentId { get; set; }
+    
+    [JsonProperty("id_issue")]
+    
+    [Display("Issue ID")]
+    public long IssueId { get; set; }
+    
     [JsonProperty("comment")]
     [Display("Comment")]
     public string Comment { get; set; }
 
     [JsonProperty("id_qa_entry")]
-    [Display("QA Entry ID")]
-    public string IdQaEntry { get; set; }
+    [Display("QA entry ID")]
+    public long IdQaEntry { get; set; }
 
     [JsonProperty("source_page")]
-    [Display("Source Page")]
-    public string SourcePage { get; set; }
+    [Display("Source page")]
+    public int SourcePage { get; set; }
 
     [JsonProperty("uid")]
     [Display("UID")]
-    public string Uid { get; set; }
+    public long Uid { get; set; }
 }

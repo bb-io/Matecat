@@ -4,8 +4,8 @@ public class ApiEndpoints
 {
     #region Versions
 
-    public const string V1 = "/v1";
-    public const string V2 = "/v2";
+    public const string V1 = "/api/v1";
+    public const string V2 = "/api/v2";
 
     #endregion
 
@@ -19,7 +19,8 @@ public class ApiEndpoints
     #region Jobs
 
     public const string Jobs = V2 + "/jobs";
-    public const string Translation = V2 + "/translation";
+    public const string Translation = "/translation";
+    public const string TMX = "/TMX";
 
     #endregion
 

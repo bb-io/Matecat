@@ -29,6 +29,7 @@ public class CreateProjectRequest
     [Display("Private TM key")]
     public string? TmKey { get; set; }
 
+    [JsonProperty("subject")]
     public string? Subject { get; set; }
 
     [JsonProperty("segmentation_rule")]
@@ -43,6 +44,7 @@ public class CreateProjectRequest
     [Display("Id team")]
     public string? IdTeam { get; set; }
 
+    [JsonProperty("lexiqa")]
     public string? LexiQa { get; set; }
 
     [Display("Speech-to-text")] public int? Speech2Text { get; set; }
@@ -55,5 +57,6 @@ public class CreateProjectRequest
     [Display("Pretranslate 100")]
     public int? Pretranslate100 { get; set; }
 
+    [JsonProperty("metadata")]
     public string? Metadata { get; set; }
 }

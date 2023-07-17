@@ -44,13 +44,14 @@ public class ProjectActions
     }    
     
     [Action("Get project", Description = "Retrieve information on the specified Project")]
-    public Task<Project> GetProject(IEnumerable<AuthenticationCredentialsProvider> creds,
+    public async Task<Project> GetProject(IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] [Display("Project ID and password")] string projectId)
     {
         var endpoint = $"{ApiEndpoints.Projects}/{projectId}";
         var request = new MatecatRequest(endpoint, Method.Get, creds);
 
-        return _client.ExecuteWithHandling<Project>(request);
+        var response = await _client.ExecuteWithHandling<ProjectResponse>(request);
+        return response.Project;
     }
     
     [Action("Cancel project", Description = "Cancel a project")]

@@ -1,21 +1,20 @@
-﻿using RestSharp;
+﻿using Apps.Matecat.Models.Response.Error;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace Apps.Matecat.RestSharp;
 
 public class MatecatClient : RestClient
 {
-    public MatecatClient() : base(new RestClientOptions { BaseUrl = new("www.matecat.com/api") })
+    public MatecatClient() : base(new RestClientOptions { BaseUrl = new("https://www.matecat.com") })
     {
     }
 
     public async Task<T> ExecuteWithHandling<T>(RestRequest request)
     {
-        var response = await this.ExecuteAsync<T>(request);
+        var response = await ExecuteWithHandling(request);
 
-        if (response.IsSuccessStatusCode)
-            return response.Data;
-
-        throw ConfigureErrorException(response);
+        return JsonConvert.DeserializeObject<T>(response.Content);
     }    
     
     public async Task<RestResponse> ExecuteWithHandling(RestRequest request)
@@ -30,7 +29,19 @@ public class MatecatClient : RestClient
 
     private Exception ConfigureErrorException(RestResponse response)
     {
-        //TODO: Add error configuring
-        throw new NotImplementedException();
+        var errorsResponse = JsonConvert.DeserializeObject<ErrorsResponse>(response.Content);
+
+        if (errorsResponse.Errors is not null)
+            return GetMultipleErrors(errorsResponse);
+        
+        var error = JsonConvert.DeserializeObject<Error>(response.Content);
+
+        return new(error.Message);
+    }
+
+    private Exception GetMultipleErrors(ErrorsResponse errorsResponse)
+    {
+        var messages = errorsResponse.Errors.Select(x => x.Message).ToArray();
+        return new(string.Join(';', messages));
     }
 }

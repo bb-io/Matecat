@@ -3,15 +3,15 @@ using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Response.TranslationIssue;
 
-public class TranslationIssue
+public class TranslationIssueCommentV3
 {
-    [JsonProperty("comments")]
-    [Display("Comments")]
-    public List<TranslationIssueComment> Comments { get; set; }
+    [JsonProperty("comment")]
+    [Display("Comment")]
+    public string Comment { get; set; }
 
     [JsonProperty("created_at")]
     [Display("Created at")]
-    public string CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     [JsonProperty("id")]
     [Display("ID")]
@@ -19,15 +19,15 @@ public class TranslationIssue
 
     [JsonProperty("id_category")]
     [Display("Category ID")]
-    public long IdCategory { get; set; }
+    public long CategoryId { get; set; }
 
     [JsonProperty("id_job")]
     [Display("Job ID")]
-    public long IdJob { get; set; }
+    public long JobId { get; set; }
 
     [JsonProperty("id_segment")]
     [Display("Segment ID")]
-    public long IdSegment { get; set; }
+    public long SegmentId { get; set; }
 
     [JsonProperty("is_full_segment")]
     [Display("Is full segment")]
@@ -39,33 +39,41 @@ public class TranslationIssue
 
     [JsonProperty("start_node")]
     [Display("Start node")]
-    public string StartNode { get; set; }
+    public int? StartNode { get; set; }
 
     [JsonProperty("start_offset")]
     [Display("Start offset")]
-    public string StartOffset { get; set; }
+    public int? StartOffset { get; set; }
 
     [JsonProperty("end_node")]
     [Display("End node")]
-    public string EndNode { get; set; }
+    public int? EndNode { get; set; }
 
     [JsonProperty("end_offset")]
     [Display("End offset")]
-    public string EndOffset { get; set; }
+    public int? EndOffset { get; set; }
 
     [JsonProperty("translation_version")]
     [Display("Translation version")]
-    public string TranslationVersion { get; set; }
+    public int? TranslationVersion { get; set; }
 
     [JsonProperty("target_text")]
     [Display("Target text")]
     public string TargetText { get; set; }
 
-    [JsonProperty("penality_points")]
-    [Display("Penality points")]
-    public string PenalityPoints { get; set; }
+    [JsonProperty("penalty_points")]
+    [Display("Penalty points")]
+    public string PenaltyPoints { get; set; }
 
     [JsonProperty("rebutted_at")]
     [Display("Rebutted at")]
     public string RebuttedAt { get; set; }
+
+    [JsonProperty("diff")]
+    [Display("Diff")]
+    public string Diff { get; set; }
+
+    [JsonProperty("revision_number")]
+    [Display("Revision number")]
+    public int RevisionNumber { get; set; }
 }

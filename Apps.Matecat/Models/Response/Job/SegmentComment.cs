@@ -41,7 +41,7 @@ public class SegmentComment
     [Display("Source page")]
     public int SourcePage { get; set; }
 
-    [JsonProperty("mwssage_type")]
+    [JsonProperty("message_type")]
     [Display("Message type")]
     public int MessageType { get; set; }
 

@@ -21,6 +21,7 @@ public class StringValueConverter : JsonConverter
         foreach (var property in properties)
         {
             var propertyValue = property.GetValue(value);
+            
             writer.WritePropertyName(GetJsonPropertyName(property));
             writer.WriteValue(propertyValue?.ToString());
         }

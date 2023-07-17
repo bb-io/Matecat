@@ -12,7 +12,7 @@ using RestSharp;
 namespace Apps.Matecat.Actions;
 
 [ActionList]
-public class TeamsActions
+public class TeamActions
 {
     #region Fields
 
@@ -22,7 +22,7 @@ public class TeamsActions
 
     #region Constructors
 
-    public TeamsActions()
+    public TeamActions()
     {
         _client = new();
     }
@@ -82,7 +82,12 @@ public class TeamsActions
     {
         var endpoint = $"{ApiEndpoints.Teams}/{teamId}/members";
         var request = new MatecatRequest(endpoint, Method.Post, creds)
-            .WithFormData(members);
+        {
+            AlwaysMultipartFormData = true
+        };
+
+        foreach (var (member, ind) in members.Select((val, ind) => (val, ind)))
+            request.AddParameter($"members[{ind}]", member);
 
         return _client.ExecuteWithHandling<MembersResponse>(request);
     }   
@@ -94,7 +99,7 @@ public class TeamsActions
     {
         var endpoint = $"{ApiEndpoints.Teams}/{teamId}/members/{memberId}";
         var request = new MatecatRequest(endpoint, Method.Delete, creds);
-
+    
         return _client.ExecuteWithHandling<MembersResponse>(request);
     }
 

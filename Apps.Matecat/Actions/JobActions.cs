@@ -1,4 +1,5 @@
 ﻿using Apps.Matecat.Constants;
+using Apps.Matecat.Extensions;
 using Apps.Matecat.Models.Response;
 using Apps.Matecat.Models.Response.Job;
 using Apps.Matecat.RestSharp;
@@ -28,8 +29,8 @@ public class JobActions
 
     #region Actions
 
-    [Action("Download translation", Description = "Download job translation")]
-    public async Task<TranslationResponse> DownloadTranslation(IEnumerable<AuthenticationCredentialsProvider> creds,
+    [Action("Download translation as ZIP", Description = "Download job translation as ZIP")]
+    public async Task<FileResponse> DownloadTranslationAsZip(IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
     {
@@ -38,7 +39,41 @@ public class JobActions
 
         var response = await _client.ExecuteWithHandling(request);
 
-        return new(response.Content);
+        return new(response.RawBytes);
+    }
+    
+    [Action("Download translation", Description = "Download job translation")]
+    public async Task<FilesResponse> DownloadTranslation(IEnumerable<AuthenticationCredentialsProvider> creds,
+        [ActionParameter] [Display("Job ID and password")]
+        string jobId)
+    {
+        var archive = (await DownloadTranslationAsZip(creds, jobId)).File;
+        var files = archive.GetFilesFromZip().ToList();
+        
+        return new(files);
+    }
+
+    [Action("Download job TMX", Description = "Download TMX of a job")]
+    public async Task<FileResponse> DownloadTmx(IEnumerable<AuthenticationCredentialsProvider> creds,
+        [ActionParameter] [Display("Job ID and password")] string jobId)
+    {
+        var endpoint = $"{ApiEndpoints.TMX}/{jobId}";
+        var request = new MatecatRequest(endpoint, Method.Get, creds);
+
+        var response = await _client.ExecuteWithHandling(request);
+        return new(response.RawBytes);
+    }
+
+    [Action("Get job", Description = "Get all information about a Job")]
+    public async Task<JobChunks> GetJob(IEnumerable<AuthenticationCredentialsProvider> creds,
+        [ActionParameter] [Display("Job ID and password")]
+        string jobId)
+    {
+        var endpoint = $"{ApiEndpoints.Jobs}/{jobId}";
+        var request = new MatecatRequest(endpoint, Method.Get, creds);
+
+        var response = await _client.ExecuteWithHandling<JobResponse>(request);
+        return response.Job;
     }
 
     [Action("Cancel job", Description = "Cancel a job")]
@@ -75,7 +110,7 @@ public class JobActions
     }
 
     [Action("Get job segments comments", Description = "Gets the list of comments on all job segments")]
-    public async Task<CommentsResponse> GetSegmentComments(IEnumerable<AuthenticationCredentialsProvider> creds,
+    public Task<CommentsResponse> GetSegmentComments(IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] [Display("Job ID and password")]
         string jobId,
         [ActionParameter] [Display("From ID")] int? fromId)
@@ -87,9 +122,7 @@ public class JobActions
 
         var request = new MatecatRequest(endpoint, Method.Get, creds);
 
-        var response = await _client.ExecuteWithHandling<List<SegmentComment>>(request);
-
-        return new(response);
+        return _client.ExecuteWithHandling<CommentsResponse>(request);
     }
 
     #endregion
