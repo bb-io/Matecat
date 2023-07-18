@@ -12,4 +12,6 @@ public class CreateProjectResponse
     [JsonProperty("project_pass")]
     [Display("Project password")]
     public string ProjectPassword { get; set; }
+
+    [Display("Project ID and password")] public string ProjectIdAndPassword => $"{ProjectId}/{ProjectPassword}";
 }

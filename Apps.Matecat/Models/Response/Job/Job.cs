@@ -5,13 +5,13 @@ namespace Apps.Matecat.Models.Response.Job;
 
 public class Job
 {
-    [JsonProperty("ID")]
-    [Display("ID")]
-    public int Id { get; set; }
+    [JsonProperty("ID")] [Display("ID")] public int Id { get; set; }
 
     [JsonProperty("password")]
     [Display("Password")]
     public string Password { get; set; }
+
+    [Display("ID and password")] public string IdAndPassword => $"{Id}/{Password}";
 
     [JsonProperty("source")]
     [Display("Source")]
@@ -65,13 +65,9 @@ public class Job
     [Display("Overall quality")]
     public string QualityOverall { get; set; }
 
-    [JsonProperty("pee")]
-    [Display("Pee")]
-    public int Pee { get; set; }
+    [JsonProperty("pee")] [Display("Pee")] public int Pee { get; set; }
 
-    [JsonProperty("tte")]
-    [Display("Tte")]
-    public int Tte { get; set; }
-    
+    [JsonProperty("tte")] [Display("Tte")] public int Tte { get; set; }
+
     public Translator Translator { get; set; }
 }
