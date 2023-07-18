@@ -92,16 +92,16 @@ public class TeamActions
         return _client.ExecuteWithHandling<MembersResponse>(request);
     }   
     
-    [Action("Remove member", Description = "Remove member from a team")]
-    public Task<MembersResponse> RemoveMember(IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] [Display("Team ID")] int teamId,
-        [ActionParameter] [Display("Member ID")] int memberId)
-    {
-        var endpoint = $"{ApiEndpoints.Teams}/{teamId}/members/{memberId}";
-        var request = new MatecatRequest(endpoint, Method.Delete, creds);
-    
-        return _client.ExecuteWithHandling<MembersResponse>(request);
-    }
+    // [Action("Remove member", Description = "Remove member from a team")]
+    // public Task<MembersResponse> RemoveMember(IEnumerable<AuthenticationCredentialsProvider> creds,
+    //     [ActionParameter] [Display("Team ID")] int teamId,
+    //     [ActionParameter] [Display("Member ID")] int memberId)
+    // {
+    //     var endpoint = $"{ApiEndpoints.Teams}/{teamId}/members/{memberId}";
+    //     var request = new MatecatRequest(endpoint, Method.Delete, creds);
+    //
+    //     return _client.ExecuteWithHandling<MembersResponse>(request);
+    // }
 
     #endregion
 

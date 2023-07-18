@@ -42,32 +42,32 @@ public class TranslationIssueActions
         return _client.ExecuteWithHandling<TranslationIssuesResponse>(request);
     }
 
-    [Action("Create translation issue", Description = "Create project translation issue")]
-    public Task<TranslationIssue> CreateTranslationIssue(
-        IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] CreateTranslationIssueRequest requestData)
-    {
-        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
-                       + $"/{requestData.SegmentId}/translation-issues";
-
-        var request = new MatecatRequest(endpoint, Method.Post, creds)
-            .WithFormData(requestData);
-
-        return _client.ExecuteWithHandling<TranslationIssue>(request);
-    }
-
-    [Action("Delete translation issue", Description = "Delete project translation issue")]
-    public Task DeleteTranslationIssue(
-        IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] TranslationIssueRequest requestData)
-    {
-        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/segments"
-                       + $"/{requestData.SegmentId}/translation-issues/{requestData.IssueId}";
-
-        var request = new MatecatRequest(endpoint, Method.Delete, creds);
-
-        return _client.ExecuteWithHandling(request);
-    }
+    // [Action("Create translation issue", Description = "Create project translation issue")]
+    // public Task<TranslationIssue> CreateTranslationIssue(
+    //     IEnumerable<AuthenticationCredentialsProvider> creds,
+    //     [ActionParameter] CreateTranslationIssueRequest requestData)
+    // {
+    //     var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
+    //                    + $"/{requestData.SegmentId}/translation-issues";
+    //
+    //     var request = new MatecatRequest(endpoint, Method.Post, creds)
+    //         .WithFormData(requestData);
+    //
+    //     return _client.ExecuteWithHandling<TranslationIssue>(request);
+    // }
+    //
+    // [Action("Delete translation issue", Description = "Delete project translation issue")]
+    // public Task DeleteTranslationIssue(
+    //     IEnumerable<AuthenticationCredentialsProvider> creds,
+    //     [ActionParameter] TranslationIssueRequest requestData)
+    // {
+    //     var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/segments"
+    //                    + $"/{requestData.SegmentId}/translation-issues/{requestData.IssueId}";
+    //
+    //     var request = new MatecatRequest(endpoint, Method.Delete, creds);
+    //
+    //     return _client.ExecuteWithHandling(request);
+    // }
 
     [Action("Get translation issue comments", Description = "Get project translation issue comments")]
     public Task<TranslationIssueCommentsResponse> GetTranslationIssueComments(
@@ -82,20 +82,20 @@ public class TranslationIssueActions
         return _client.ExecuteWithHandling<TranslationIssueCommentsResponse>(request);
     }
 
-    [Action("Add translation issue comment", Description = "Add project translation issue comment")]
-    public async Task<TranslationIssueCommentV3> AddTranslationIssueCommentRequest(
-        IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] AddTranslationIssueCommentRequest requestData)
-    {
-        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
-                       + $"/{requestData.SegmentId}/translation-issues/{requestData.IssueId}/comments";
-
-        var request = new MatecatRequest(endpoint, Method.Post, creds)
-            .WithFormData(requestData);
-
-        var response = await _client.ExecuteWithHandling<TranslationIssueCommentResponse>(request);
-        return response.Comment;
-    }
+    // [Action("Add translation issue comment", Description = "Add project translation issue comment")]
+    // public async Task<TranslationIssueCommentV3> AddTranslationIssueCommentRequest(
+    //     IEnumerable<AuthenticationCredentialsProvider> creds,
+    //     [ActionParameter] AddTranslationIssueCommentRequest requestData)
+    // {
+    //     var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
+    //                    + $"/{requestData.SegmentId}/translation-issues/{requestData.IssueId}/comments";
+    //
+    //     var request = new MatecatRequest(endpoint, Method.Post, creds)
+    //         .WithFormData(requestData);
+    //
+    //     var response = await _client.ExecuteWithHandling<TranslationIssueCommentResponse>(request);
+    //     return response.Comment;
+    // }
 
     #endregion
 }
