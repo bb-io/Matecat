@@ -20,7 +20,7 @@ public class ApiEndpoints
 
     public const string Jobs = V2 + "/jobs";
     public const string Translation = "/translation";
-    public const string TMX = "/TMX";
+    public const string Tmx = "/TMX";
 
     #endregion
 

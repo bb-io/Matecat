@@ -10,6 +10,7 @@ using RestSharp;
 
 namespace Apps.Matecat.Actions;
 
+[ActionList]
 public class JobActions
 {
     #region Fields
@@ -57,7 +58,7 @@ public class JobActions
     public async Task<FileResponse> DownloadTmx(IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] [Display("Job ID and password")] string jobId)
     {
-        var endpoint = $"{ApiEndpoints.TMX}/{jobId}";
+        var endpoint = $"{ApiEndpoints.Tmx}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, creds);
 
         var response = await _client.ExecuteWithHandling(request);
