@@ -27,5 +27,5 @@ public class TranslationIssueComment
 
     [JsonProperty("source_page")]
     [Display("Source page")]
-    public int SourcePage { get; set; }
+    public int? SourcePage { get; set; }
 }

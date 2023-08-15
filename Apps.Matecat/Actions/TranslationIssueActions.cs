@@ -47,7 +47,7 @@ public class TranslationIssueActions
     //     IEnumerable<AuthenticationCredentialsProvider> creds,
     //     [ActionParameter] CreateTranslationIssueRequest requestData)
     // {
-    //     var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
+    //     var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/segments"
     //                    + $"/{requestData.SegmentId}/translation-issues";
     //
     //     var request = new MatecatRequest(endpoint, Method.Post, creds)
