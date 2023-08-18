@@ -7,15 +7,15 @@ public class CreateTranslationIssueRequest
 {
     [JsonProperty("id_job")]
     [Display("Job ID")]
-    public long JobId { get; set; }
+    public string JobId { get; set; }
 
     [JsonProperty("password")]
-    [Display("Password")]
+    [Display("Revision password")]
     public string Password { get; set; }
 
     [JsonProperty("id_segment")]
     [Display("Segment ID")]
-    public long SegmentId { get; set; }
+    public string SegmentId { get; set; }
 
     [JsonProperty("version_number")]
     [Display("Version Number")]
@@ -23,7 +23,7 @@ public class CreateTranslationIssueRequest
 
     [JsonProperty("id_category")]
     [Display("Category ID")]
-    public long CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     [JsonProperty("severity")]
     [Display("Severity")]

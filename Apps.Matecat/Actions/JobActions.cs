@@ -114,7 +114,7 @@ public class JobActions
     public Task<CommentsResponse> GetSegmentComments(IEnumerable<AuthenticationCredentialsProvider> creds,
         [ActionParameter] [Display("Job ID and password")]
         string jobId,
-        [ActionParameter] [Display("From ID")] int? fromId)
+        [ActionParameter] [Display("From ID")] string? fromId)
     {
         var endpoint = $"{ApiEndpoints.Jobs}/{jobId}/comments";
 

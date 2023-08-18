@@ -7,7 +7,7 @@ public class Team
 {
     [JsonProperty("id")]
     [Display("ID")]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [JsonProperty("name")]
     [Display("Name")]
@@ -23,5 +23,5 @@ public class Team
 
     [JsonProperty("created_by")]
     [Display("Created by")]
-    public int CreatedBy { get; set; }
+    public string CreatedBy { get; set; }
 }

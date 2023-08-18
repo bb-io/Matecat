@@ -15,19 +15,19 @@ public class TranslationIssueCommentV3
 
     [JsonProperty("id")]
     [Display("ID")]
-    public long Id { get; set; }
+    public string Id { get; set; }
 
     [JsonProperty("id_category")]
     [Display("Category ID")]
-    public long CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     [JsonProperty("id_job")]
     [Display("Job ID")]
-    public long JobId { get; set; }
+    public string JobId { get; set; }
 
     [JsonProperty("id_segment")]
     [Display("Segment ID")]
-    public long SegmentId { get; set; }
+    public string SegmentId { get; set; }
 
     [JsonProperty("is_full_segment")]
     [Display("Is full segment")]

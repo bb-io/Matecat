@@ -7,15 +7,15 @@ public class TranslationIssueComment
 {
     [JsonProperty("id")]
     [Display("ID")]
-    public long Id { get; set; }
+    public string Id { get; set; }
 
     [JsonProperty("uid")]
     [Display("UID")]
-    public long Uid { get; set; }
+    public string Uid { get; set; }
 
     [JsonProperty("id_qa_entry")]
     [Display("QA entry ID")]
-    public long QaEntryId { get; set; }
+    public string QaEntryId { get; set; }
 
     [JsonProperty("create_date")]
     [Display("Create date")]

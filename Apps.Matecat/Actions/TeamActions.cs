@@ -53,7 +53,7 @@ public class TeamActions
     
     [Action("List team projects", Description = "List all projects of a team")]
     public Task<AllProjectsResponse> ListTeamProjects(IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] [Display("Team ID")] int teamId)
+        [ActionParameter] [Display("Team ID")] string teamId)
     {
         var endpoint = $"{ApiEndpoints.Teams}/{teamId}/projects";
         var request = new MatecatRequest(endpoint, Method.Get, creds);
@@ -67,7 +67,7 @@ public class TeamActions
 
     [Action("List team members", Description = "List all members of the specified team")]
     public Task<MembersResponse> ListTeamMembers(IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] [Display("Team ID")] int teamId)
+        [ActionParameter] [Display("Team ID")] string teamId)
     {
         var endpoint = $"{ApiEndpoints.Teams}/{teamId}/members";
         var request = new MatecatRequest(endpoint, Method.Get, creds);
@@ -77,7 +77,7 @@ public class TeamActions
     
     [Action("Add members", Description = "Create new team memberships")]
     public Task<MembersResponse> AddMembers(IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] [Display("Team ID")] int teamId,
+        [ActionParameter] [Display("Team ID")] string teamId,
         [ActionParameter] [Display("Members")] IEnumerable<string> members)
     {
         var endpoint = $"{ApiEndpoints.Teams}/{teamId}/members";
@@ -94,8 +94,8 @@ public class TeamActions
     
     [Action("Remove member", Description = "Remove member from a team")]
     public Task<MembersResponse> RemoveMember(IEnumerable<AuthenticationCredentialsProvider> creds,
-        [ActionParameter] [Display("Team ID")] int teamId,
-        [ActionParameter] [Display("User UID")] int memberId)
+        [ActionParameter] [Display("Team ID")] string teamId,
+        [ActionParameter] [Display("User UID")] string memberId)
     {
         var endpoint = $"{ApiEndpoints.Teams}/{teamId}/members/{memberId}";
         var request = new MatecatRequest(endpoint, Method.Delete, creds);

@@ -31,7 +31,7 @@ public class SegmentComment
 
     [JsonProperty("uid")]
     [Display("UID")]
-    public int Uid { get; set; }
+    public string Uid { get; set; }
 
     [JsonProperty("resolved_at")]
     [Display("Resolved at")]

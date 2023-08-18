@@ -1,15 +1,20 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using System.Collections;
+using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Response.Job;
 
 public class Job
 {
-    [JsonProperty("ID")] [Display("ID")] public int Id { get; set; }
+    [JsonProperty("ID")] [Display("ID")] public string Id { get; set; }
 
     [JsonProperty("password")]
     [Display("Password")]
     public string Password { get; set; }
+    
+    [JsonProperty("revise_passwords")]
+    [Display("Revise passwords")]
+    public IEnumerable<RevisePassword> RevisePasswords { get; set; }
 
     [Display("ID and password")] public string IdAndPassword => $"{Id}/{Password}";
 

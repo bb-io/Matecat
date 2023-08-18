@@ -15,19 +15,19 @@ public class TranslationIssue
 
     [JsonProperty("id")]
     [Display("ID")]
-    public long Id { get; set; }
+    public string Id { get; set; }
 
     [JsonProperty("id_category")]
     [Display("Category ID")]
-    public long IdCategory { get; set; }
+    public string IdCategory { get; set; }
 
     [JsonProperty("id_job")]
     [Display("Job ID")]
-    public long IdJob { get; set; }
+    public string IdJob { get; set; }
 
     [JsonProperty("id_segment")]
     [Display("Segment ID")]
-    public long IdSegment { get; set; }
+    public string IdSegment { get; set; }
 
     [JsonProperty("is_full_segment")]
     [Display("Is full segment")]

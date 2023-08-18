@@ -7,7 +7,7 @@ public class AddTranslationIssueCommentRequest
 {
     [JsonProperty("id_job")]
     [Display("Job ID")]
-    public long JobId { get; set; } 
+    public string JobId { get; set; } 
     
     [JsonProperty("password")]
     [Display("Job password")]
@@ -15,12 +15,12 @@ public class AddTranslationIssueCommentRequest
     
     [JsonProperty("id_segment")]
     [Display("Segment ID")]
-    public long SegmentId { get; set; }
+    public string SegmentId { get; set; }
     
     [JsonProperty("id_issue")]
     
     [Display("Issue ID")]
-    public long IssueId { get; set; }
+    public string IssueId { get; set; }
     
     [JsonProperty("comment")]
     [Display("Comment")]
@@ -28,7 +28,7 @@ public class AddTranslationIssueCommentRequest
 
     [JsonProperty("id_qa_entry")]
     [Display("QA entry ID")]
-    public long IdQaEntry { get; set; }
+    public string IdQaEntry { get; set; }
 
     [JsonProperty("source_page")]
     [Display("Source page")]
@@ -36,5 +36,5 @@ public class AddTranslationIssueCommentRequest
 
     [JsonProperty("uid")]
     [Display("UID")]
-    public long Uid { get; set; }
+    public string Uid { get; set; }
 }

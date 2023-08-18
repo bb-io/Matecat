@@ -7,11 +7,11 @@ public class TeamMember
 {
     [JsonProperty("id")]
     [Display("ID")]
-    public int Id { get; set; }
+    public string Id { get; set; }
     
     [JsonProperty("id_team")]
     [Display("Team ID")]
-    public int IdTeam { get; set; }
+    public string IdTeam { get; set; }
     
     [JsonProperty("user")]
     [Display("User")]

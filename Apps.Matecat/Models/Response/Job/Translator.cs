@@ -11,7 +11,7 @@ public class Translator
 
     [JsonProperty("added_by")]
     [Display("Added by")]
-    public int AddedBy { get; set; }
+    public string AddedBy { get; set; }
 
     [JsonProperty("delivery_date")]
     [Display("Delivery date")]
@@ -31,5 +31,5 @@ public class Translator
 
     [JsonProperty("id_translator_profile")]
     [Display("Translator profile ID")]
-    public int TranslatorProfileId { get; set; }
+    public string TranslatorProfileId { get; set; }
 }
