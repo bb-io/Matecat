@@ -1,4 +1,7 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.Matecat.DataSourceHandlers;
+using Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
+using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Request.Project;
@@ -11,18 +14,22 @@ public class CreateProjectRequest
 
     [JsonProperty("source_lang")]
     [Display("Source language")]
+    [DataSource(typeof(LanguageDataHandler))]
     public string SourceLanguage { get; set; }
 
     [JsonProperty("target_lang")]
     [Display("Target language")]
+    [DataSource(typeof(LanguageDataHandler))]
     public string TargetLanguage { get; set; }
 
     [JsonProperty("tms_engine")]
     [Display("TMS engine")]
-    public int? TmsEngine { get; set; }
+    [DataSource(typeof(TmsEngineDataHandler))]
+    public string? TmsEngine { get; set; }
 
     [JsonProperty("mt_engine")]
     [Display("MT engine")]
+    [DataSource(typeof(MtEngineDataHandler))]
     public int? MtEngine { get; set; }
 
     [JsonProperty("private_tm_key")]
@@ -42,6 +49,7 @@ public class CreateProjectRequest
 
     [JsonProperty("id_team")]
     [Display("Id team")]
+    [DataSource(typeof(TeamDataHandler))]
     public string? IdTeam { get; set; }
 
     [JsonProperty("lexiqa")]
@@ -51,10 +59,10 @@ public class CreateProjectRequest
 
     [JsonProperty("get_public_matches")]
     [Display("Get public matches")]
-    public string? GetPublicMatches { get; set; }
+    public bool? GetPublicMatches { get; set; }
 
     [JsonProperty("pretranslate_100")]
-    [Display("Pretranslate 100")]
+    [Display("Pre-translate 100% matches from TM")]
     public int? Pretranslate100 { get; set; }
 
     [JsonProperty("metadata")]

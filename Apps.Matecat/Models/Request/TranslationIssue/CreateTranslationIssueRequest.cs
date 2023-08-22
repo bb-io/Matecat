@@ -1,4 +1,6 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
+using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Request.TranslationIssue;
@@ -22,11 +24,13 @@ public class CreateTranslationIssueRequest
     public int VersionNumber { get; set; }
 
     [JsonProperty("id_category")]
-    [Display("Category ID")]
+    [Display("Category")]
+    [DataSource(typeof(TranslationIssueCategoryDataSource))]
     public string CategoryId { get; set; }
 
     [JsonProperty("severity")]
     [Display("Severity")]
+    [DataSource(typeof(SeverityDataHandler))]
     public string Severity { get; set; }
 
     [JsonProperty("translation_version")]

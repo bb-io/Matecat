@@ -29,4 +29,11 @@ public class ApiEndpoints
     public const string Teams = V2 + "/teams";
 
     #endregion
+
+    #region Languages
+
+    public const string Languages = V2 + "/languages";
+
+
+    #endregion
 }
