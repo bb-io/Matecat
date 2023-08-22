@@ -48,7 +48,7 @@ public class CreateProjectRequest
     public string? OwnerEmail { get; set; }
 
     [JsonProperty("id_team")]
-    [Display("Id team")]
+    [Display("Team")]
     [DataSource(typeof(TeamDataHandler))]
     public string? IdTeam { get; set; }
 
