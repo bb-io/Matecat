@@ -1,3 +1,3 @@
-﻿namespace Apps.Matecat.Models.Response;
+﻿namespace Apps.Matecat.Models.Response.File;
 
-public record FileResponse(byte[] File);
+public record FileResponse(Blackbird.Applications.Sdk.Common.Files.File File);

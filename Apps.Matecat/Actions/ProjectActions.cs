@@ -42,7 +42,7 @@ public class ProjectActions : BaseInvocable
     {
         var request = new MatecatRequest(ApiEndpoints.NewProject, Method.Post, Creds)
             .WithFormData(requestData, isMultipartFormData: true)
-            .WithFile(fileData.File, fileData.FileName);
+            .WithFile(fileData.File.Bytes, fileData.FileName ?? fileData.File.Name);
 
         return _client.ExecuteWithHandling<CreateProjectResponse>(request);
     }    
