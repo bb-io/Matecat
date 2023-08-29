@@ -5,7 +5,7 @@ namespace Apps.Matecat.Models.Response.Project;
 
 public class Project
 {
-    [JsonProperty("ID")] public string Id { get; set; }
+    [Display("Project")][JsonProperty("ID")] public string Id { get; set; }
 
     [JsonProperty("password")] public string Password { get; set; }
 

@@ -5,7 +5,7 @@ namespace Apps.Matecat.Models.Response.Job;
 
 public class Job
 {
-    [JsonProperty("ID")] [Display("ID")] public string Id { get; set; }
+    [JsonProperty("ID")] [Display("Job")] public string Id { get; set; }
 
     [JsonProperty("password")]
     [Display("Password")]
