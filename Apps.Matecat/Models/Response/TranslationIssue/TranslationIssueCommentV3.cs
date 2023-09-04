@@ -75,5 +75,5 @@ public class TranslationIssueCommentV3
 
     [JsonProperty("revision_number")]
     [Display("Revision number")]
-    public int RevisionNumber { get; set; }
+    public int? RevisionNumber { get; set; }
 }

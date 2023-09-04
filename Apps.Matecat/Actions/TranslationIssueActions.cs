@@ -81,20 +81,19 @@ public class TranslationIssueActions : BaseInvocable
         return _client.ExecuteWithHandling<TranslationIssueCommentsResponse>(request);
     }
 
-    // [Action("Add translation issue comment", Description = "Add project translation issue comment")]
-    // public async Task<TranslationIssueCommentV3> AddTranslationIssueCommentRequest(
-    //     
-    //     [ActionParameter] AddTranslationIssueCommentRequest requestData)
-    // {
-    //     var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
-    //                    + $"/{requestData.SegmentId}/translation-issues/{requestData.IssueId}/comments";
-    //
-    //     var request = new MatecatRequest(endpoint, Method.Post, Creds)
-    //         .WithFormData(requestData);
-    //
-    //     var response = await _client.ExecuteWithHandling<TranslationIssueCommentResponse>(request);
-    //     return response.Comment;
-    // }
+    [Action("Add translation issue comment", Description = "Add project translation issue comment")]
+    public async Task<TranslationIssueCommentV3> AddTranslationIssueCommentRequest(
+        [ActionParameter] AddTranslationIssueCommentRequest requestData)
+    {
+        var endpoint = $"{ApiEndpoints.Jobs}/{requestData.JobId}/{requestData.Password}/segments"
+                       + $"/{requestData.SegmentId}/translation-issues/{requestData.IssueId}/comments";
+    
+        var request = new MatecatRequest(endpoint, Method.Post, Creds)
+            .WithFormData(requestData);
+    
+        var response = await _client.ExecuteWithHandling<TranslationIssueCommentResponse>(request);
+        return response.Comment;
+    }
 
     #endregion
 }

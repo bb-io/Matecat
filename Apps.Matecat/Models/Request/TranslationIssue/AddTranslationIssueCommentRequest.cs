@@ -22,19 +22,19 @@ public class AddTranslationIssueCommentRequest
     [Display("Issue ID")]
     public string IssueId { get; set; }
     
-    [JsonProperty("comment")]
+    [JsonProperty("message")]
     [Display("Comment")]
     public string Comment { get; set; }
 
     [JsonProperty("id_qa_entry")]
     [Display("QA entry ID")]
-    public string IdQaEntry { get; set; }
+    public string? IdQaEntry { get; set; }
 
     [JsonProperty("source_page")]
     [Display("Source page")]
-    public int SourcePage { get; set; }
+    public int? SourcePage { get; set; }
 
     [JsonProperty("uid")]
     [Display("UID")]
-    public string Uid { get; set; }
+    public string? Uid { get; set; }
 }
