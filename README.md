@@ -4,6 +4,8 @@ Blackbird is the new automation backbone for the language technology industry. B
 
 ## Introduction
 
+<!-- begin docs -->
+
 Matecat is a free online CAT tool by Translated.
 
 ## Before setting up
@@ -73,3 +75,5 @@ Let us know if you are interested in these features!
 ## Feedback
 
 Feedback to our implementation of Matecat is always very welcome. Reach out to us using the [established channels](https://www.blackbird.io/), or create an issue.
+
+<!-- end docs -->
