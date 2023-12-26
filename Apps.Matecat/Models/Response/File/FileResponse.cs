@@ -1,3 +1,5 @@
-﻿namespace Apps.Matecat.Models.Response.File;
+﻿using Blackbird.Applications.Sdk.Common.Files;
 
-public record FileResponse(Blackbird.Applications.Sdk.Common.Files.File File);
+namespace Apps.Matecat.Models.Response.File;
+
+public record FileResponse(FileReference File);

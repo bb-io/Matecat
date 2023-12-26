@@ -8,8 +8,9 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
+using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using RestSharp;
-using File = Blackbird.Applications.Sdk.Common.Files.File;
 
 namespace Apps.Matecat.Actions;
 
@@ -19,6 +20,7 @@ public class JobActions : BaseInvocable
     #region Fields
 
     private readonly MatecatClient _client;
+    private readonly IFileManagementClient _fileManagementClient;
 
     private IEnumerable<AuthenticationCredentialsProvider> Creds =>
         InvocationContext.AuthenticationCredentialsProviders;
@@ -27,9 +29,11 @@ public class JobActions : BaseInvocable
 
     #region Constructors
 
-    public JobActions(InvocationContext invocationContext) : base(invocationContext)
+    public JobActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) 
+        : base(invocationContext)
     {
         _client = new();
+        _fileManagementClient = fileManagementClient;
     }
 
     #endregion
@@ -43,14 +47,12 @@ public class JobActions : BaseInvocable
     {
         var endpoint = $"{ApiEndpoints.Translation}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
-
         var response = await _client.ExecuteWithHandling(request);
 
-        return new(new(response.RawBytes)
-        {
-            Name = $"{jobId}_translation",
-            ContentType = response.ContentType ?? MediaTypeNames.Application.Octet
-        });
+        using var stream = new MemoryStream(response.RawBytes);
+        var translation = await _fileManagementClient.UploadAsync(stream,
+            response.ContentType ?? MediaTypeNames.Application.Octet, $"{jobId}_translation");
+        return new(translation);
     }
 
     [Action("Download translation", Description = "Download job translation")]
@@ -59,7 +61,11 @@ public class JobActions : BaseInvocable
         string jobId)
     {
         var archive = (await DownloadTranslationAsZip(jobId)).File;
-        var files = archive.Bytes.GetFilesFromZip().ToList();
+        var archiveStream = await _fileManagementClient.DownloadAsync(archive);
+        var archiveBytes = await archiveStream.GetByteData();
+        var files = (await archiveBytes.GetFilesFromZip(_fileManagementClient))
+            .Select(file => file.File)
+            .ToList();
 
         return new(files);
     }
@@ -71,13 +77,12 @@ public class JobActions : BaseInvocable
     {
         var endpoint = $"{ApiEndpoints.Tmx}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
-
         var response = await _client.ExecuteWithHandling(request);
-        return new(new(response.RawBytes)
-        {
-            Name = $"{jobId}.tmx",
-            ContentType = response.ContentType ?? MediaTypeNames.Application.Octet
-        });
+        
+        using var stream = new MemoryStream(response.RawBytes);
+        var file = await _fileManagementClient.UploadAsync(stream, 
+            response.ContentType ?? MediaTypeNames.Application.Octet, $"{jobId}.tmx");
+        return new(file);
     }
 
     [Action("Get job", Description = "Get all information about a Job")]
