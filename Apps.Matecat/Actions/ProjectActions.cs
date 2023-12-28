@@ -8,6 +8,8 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
+using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using RestSharp;
 
 namespace Apps.Matecat.Actions;
@@ -18,6 +20,7 @@ public class ProjectActions : BaseInvocable
     #region Fields
 
     private readonly MatecatClient _client;
+    private readonly IFileManagementClient _fileManagementClient;
 
     private IEnumerable<AuthenticationCredentialsProvider> Creds =>
         InvocationContext.AuthenticationCredentialsProviders;
@@ -26,9 +29,11 @@ public class ProjectActions : BaseInvocable
 
     #region Constructors
 
-    public ProjectActions(InvocationContext invocationContext) : base(invocationContext)
+    public ProjectActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) 
+        : base(invocationContext)
     {
         _client = new();
+        _fileManagementClient = fileManagementClient;
     }
 
     #endregion
@@ -36,15 +41,17 @@ public class ProjectActions : BaseInvocable
     #region Actions
     
     [Action("Create project", Description = "Create new project in detached mode")]
-    public Task<CreateProjectResponse> CreateProject(
+    public async Task<CreateProjectResponse> CreateProject(
         [ActionParameter] UploadFileRequest fileData,
         [ActionParameter] CreateProjectRequest requestData)
     {
+        var fileStream = await _fileManagementClient.DownloadAsync(fileData.File);
+        var fileBytes = await fileStream.GetByteData();
         var request = new MatecatRequest(ApiEndpoints.NewProject, Method.Post, Creds)
             .WithFormData(requestData, isMultipartFormData: true)
-            .WithFile(fileData.File.Bytes, fileData.FileName ?? fileData.File.Name);
+            .WithFile(fileBytes, fileData.FileName ?? fileData.File.Name);
 
-        return _client.ExecuteWithHandling<CreateProjectResponse>(request);
+        return await _client.ExecuteWithHandling<CreateProjectResponse>(request);
     }    
     
     [Action("Get project", Description = "Retrieve information on the specified Project")]
