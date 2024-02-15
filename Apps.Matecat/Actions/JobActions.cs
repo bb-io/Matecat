@@ -1,6 +1,5 @@
 ﻿using System.Net.Mime;
 using Apps.Matecat.Constants;
-using Apps.Matecat.Extensions;
 using Apps.Matecat.Models.Response.File;
 using Apps.Matecat.Models.Response.Job;
 using Apps.Matecat.RestSharp;
@@ -62,10 +61,11 @@ public class JobActions : BaseInvocable
     {
         var archive = (await DownloadTranslationAsZip(jobId)).File;
         var archiveStream = await _fileManagementClient.DownloadAsync(archive);
-        var archiveBytes = await archiveStream.GetByteData();
-        var files = (await archiveBytes.GetFilesFromZip(_fileManagementClient))
-            .Select(file => file.File)
-            .ToList();
+        var zipEntries = await archiveStream.GetFilesFromZip();
+        var files = (await Task.WhenAll(zipEntries
+            .Select(async file =>
+                await _fileManagementClient.UploadAsync(file.FileStream, MediaTypeNames.Application.Octet,
+                    file.UploadName)))).ToList();
 
         return new(files);
     }
