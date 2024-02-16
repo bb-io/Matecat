@@ -7,7 +7,7 @@
     <Description>Free and open source online CAT tool</Description>
     <Version>1.1.0</Version>
     <AssemblyName>Apps.Matecat</AssemblyName>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.3.3" />
