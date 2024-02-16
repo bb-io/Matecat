@@ -21,14 +21,21 @@ public static class GlossaryExtensions
 
     #endregion
 
+    #region Types
+
+    private record LanguageCode(string ColumnLanguageCode, string GlossaryLanguageCode);
+
+    #endregion
+
     #region Import
     
     public static async Task<MemoryStream> ToMatecatExcelGlossary(this Glossary glossary,
         IEnumerable<AuthenticationCredentialsProvider> credentials)
     {
         var targetGlossaryLanguageCodes = await GetTargetGlossaryLanguageCodes(glossary, credentials);
-        
-        var languageRelatedHeaders = GenerateLanguageHeaders(targetGlossaryLanguageCodes);
+
+        var languageRelatedHeaders =
+            GenerateLanguageHeaders(targetGlossaryLanguageCodes.Select(code => code.ColumnLanguageCode).ToArray());
 
         var rows = new List<List<string>>
             { new(new[] { Domain, Definition }.Concat(languageRelatedHeaders)) };
@@ -66,7 +73,7 @@ public static class GlossaryExtensions
 
     #region Utils
 
-    private static async Task<string[]> GetTargetGlossaryLanguageCodes(Glossary glossary, 
+    private static async Task<List<LanguageCode>> GetTargetGlossaryLanguageCodes(Glossary glossary, 
         IEnumerable<AuthenticationCredentialsProvider> credentials)
     {
         var getLanguagesRequest = new MatecatRequest(ApiEndpoints.Languages, Method.Get, credentials);
@@ -78,7 +85,7 @@ public static class GlossaryExtensions
             .Select(section => section.LanguageCode)
             .Distinct();
 
-        var targetGlossaryLanguageCodes = new List<string>();
+        var targetGlossaryLanguageCodes = new List<LanguageCode>();
 
         foreach (var code in glossaryLanguageCodes)
         {
@@ -86,7 +93,7 @@ public static class GlossaryExtensions
                 language.Code.Equals(code, StringComparison.OrdinalIgnoreCase));
             
             if (targetLanguage != null)
-                targetGlossaryLanguageCodes.Add(targetLanguage.Code);
+                targetGlossaryLanguageCodes.Add(new(targetLanguage.Code, code));
             else
             {
                 var similarLanguages = supportedLanguages
@@ -95,11 +102,11 @@ public static class GlossaryExtensions
                     .ToArray();
                 
                 if (similarLanguages.Length > 0)
-                    targetGlossaryLanguageCodes.Add(similarLanguages[0].Code);
+                    targetGlossaryLanguageCodes.Add(new(similarLanguages[0].Code, code));
             }
         }
 
-        return targetGlossaryLanguageCodes.ToArray();
+        return targetGlossaryLanguageCodes;
     }
 
     private static string[] GenerateLanguageHeaders(string[] languageCodes)
@@ -122,22 +129,22 @@ public static class GlossaryExtensions
         return headers;
     }
 
-    private static string? GetColumnValue(string columnName, GlossaryConceptEntry entry, string languageCode)
+    private static string? GetColumnValue(string columnName, GlossaryConceptEntry entry, LanguageCode languageCode)
     {
         var languageSection = entry.LanguageSections.FirstOrDefault(ls =>
-            ls.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+            ls.LanguageCode.Equals(languageCode.GlossaryLanguageCode, StringComparison.OrdinalIgnoreCase));
 
         if (languageSection != null)
         {
             switch (columnName)
             {
-                case var name when name == languageCode:
+                case var name when name == languageCode.ColumnLanguageCode:
                     return languageSection.Terms.First().Term;
 
-                case var name when name == $"{Notes} {languageCode}":
+                case var name when name == $"{Notes} {languageCode.ColumnLanguageCode}":
                     return string.Join(';', languageSection.Terms.First().Notes ?? Enumerable.Empty<string>());
 
-                case var name when name == $"{ExampleOfUse} {languageCode}":
+                case var name when name == $"{ExampleOfUse} {languageCode.ColumnLanguageCode}":
                     return languageSection.Terms.First().UsageExample ?? string.Empty;
 
                 default:
@@ -145,8 +152,9 @@ public static class GlossaryExtensions
             }
         }
 
-        if (columnName == languageCode || columnName == $"{Notes} {languageCode}" 
-                                       || columnName == $"{ExampleOfUse} {languageCode}")
+        if (columnName == languageCode.ColumnLanguageCode 
+            || columnName == $"{Notes} {languageCode.ColumnLanguageCode}" 
+            || columnName == $"{ExampleOfUse} {languageCode.ColumnLanguageCode}")
             return string.Empty;
         
         return null;

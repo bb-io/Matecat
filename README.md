@@ -65,7 +65,7 @@ See the [Matecat API documentation](https://www.matecat.com/api/docs#/) for a de
 
 ### Glossaries
 
-- **Import glossary**. You can optionally specify an existing Translation Memory (TM) key, and the TM will be updated with the provided glossary. Glossaries can only be imported as private TMs in Matecat. More details on glossary import specifics in Matecat can be found [here](https://guides.matecat.com/how-to-add-a-glossary).
+- **Import glossary**. Matecat doesn't support language codes without a country portion. If the glossary contains such languages, the most appropriate Matecat-supported language code is selected (e.g., _es-ES_ for the _es_ language code). Glossaries can only be imported as private TMs in Matecat. More details on glossary import specifics in Matecat can be found [here](https://guides.matecat.com/how-to-add-a-glossary).
 
 ## Missing features
 
