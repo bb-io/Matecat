@@ -33,7 +33,13 @@ public class ApiEndpoints
     #region Languages
 
     public const string Languages = V2 + "/languages";
+    
+    #endregion
 
+    #region TranslationMemories
+
+    public const string TranslationMemories = V2 + "/keys/list";
+    public const string ImportGlossary = V2 + "/glossaries/import/";
 
     #endregion
 }
