@@ -11,6 +11,7 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using RestSharp;
+using Apps.Matecat.Dto;
 
 namespace Apps.Matecat.Actions;
 
@@ -41,20 +42,25 @@ public class ProjectActions : BaseInvocable
     #region Actions
     
     [Action("Create project", Description = "Create new project in detached mode")]
-    public async Task<CreateProjectResponse> CreateProject(
-        [ActionParameter] UploadFileRequest fileData,
+    public async Task<Project> CreateProject(
+        [ActionParameter] UploadFilesRequest fileData,
         [ActionParameter] CreateProjectRequest requestData)
     {
-        var fileStream = await _fileManagementClient.DownloadAsync(fileData.File);
-        var fileBytes = await fileStream.GetByteData();
         var request = new MatecatRequest(ApiEndpoints.NewProject, Method.Post, Creds)
-            .WithFormData(requestData, isMultipartFormData: true)
-            .WithFile(fileBytes, fileData.FileName ?? fileData.File.Name);
+            .WithFormData(new NewProject(requestData), isMultipartFormData: true);
 
-        return await _client.ExecuteWithHandling<CreateProjectResponse>(request);
+        foreach(var file in fileData.Files)
+        {
+            var fileStream = await _fileManagementClient.DownloadAsync(file);
+            var fileBytes = await fileStream.GetByteData();
+            request = request.WithFile(fileBytes, file.Name);
+        }
+
+        var response = await _client.ExecuteWithHandling<CreateProjectResponse>(request);
+        return await GetProject(response.ProjectIdAndPassword);
     }    
     
-    [Action("Get project", Description = "Retrieve information on the specified Project")]
+    [Action("Get project", Description = "Retrieve information on the specified project")]
     public async Task<Project> GetProject(
         [ActionParameter] [Display("Project ID and password")] string projectId)
     {

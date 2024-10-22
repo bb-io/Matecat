@@ -7,6 +7,6 @@ public class MtEngineDataHandler : EnumDataHandler
     protected override Dictionary<string, string> EnumValues => new()
     {
         {"0", "Disabled"},
-        {"1", "Get MT from MyMemory"}
+        {"1", "MT from MyMemory (Default)"}
     };
 }

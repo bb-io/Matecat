@@ -5,13 +5,20 @@ namespace Apps.Matecat.Models.Response.Project;
 
 public class Project
 {
-    [Display("Project")][JsonProperty("ID")] public string Id { get; set; }
+    [Display("Project ID")]
+    [JsonProperty("ID")] 
+    public string Id { get; set; }
 
-    [JsonProperty("password")] public string Password { get; set; }
+    [Display("Project password")]
+    [JsonProperty("password")] 
+    public string Password { get; set; }
 
-    [Display("ID and password")] public string IdAndPassword => $"{Id}/{Password}";
+    [Display("Project ID and password")] 
+    public string IdAndPassword => $"{Id}/{Password}";
 
-    [JsonProperty("name")] public string Name { get; set; }
+    [Display("Name")]
+    [JsonProperty("name")] 
+    public string Name { get; set; }
 
     [JsonProperty("id_team")]
     [Display("Team ID")]
@@ -21,13 +28,150 @@ public class Project
     [Display("Assignee ID")]
     public string IdAssignee { get; set; }
 
+    [JsonProperty("analysis")]
+    public Analysis Analysis { get; set; }
+
     [JsonProperty("create_date")]
-    [Display("Create date")]
+    [Display("Creation date")]
     public DateTime CreateDate { get; set; }
 
-    [JsonProperty("project_slug")] public string ProjectSlug { get; set; }
+    [JsonProperty("fast_analysis_wc")]
+    [Display("Fast analysis word count")]
+    public int FastAnalysisWc { get; set; }
 
-    [JsonProperty("features")] public string Features { get; set; }
+    [JsonProperty("standard_analysis_wc")]
+    [Display("Standard analysis word count")]
+    public int StandardAnalysisWc { get; set; }
 
-    [JsonProperty("jobs")] public List<Job.Job> Jobs { get; set; }
+    [JsonProperty("project_slug")]
+    [Display("Project slug")]
+    public string ProjectSlug { get; set; }
+
+    [JsonProperty("features")]
+    [Display("Features")]
+    public string Features { get; set; }
+
+    [JsonProperty("is_cancelled")]
+    [Display("Is cancelled")]
+    public bool IsCancalled { get; set; }
+
+    [JsonProperty("is_archived")]
+    [Display("Is archived")]
+    public bool IsArchived { get; set; }
+
+    [JsonProperty("remote_file_service")]
+    [Display("Remote file service")]
+    public string? RemoteFileService { get; set; }
+
+    [JsonProperty("due_date")]
+    [Display("Due date")]
+    public DateTime? DueDate { get; set; }
+
+    [JsonProperty("jobs")] 
+    public List<Job.Job> Jobs { get; set; }
+}
+
+public class Analysis
+{
+    [Display("Name")]
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [Display("Status")]
+    [JsonProperty("status")]
+    public string Status { get; set; }
+
+    [JsonProperty("create_date")]
+    [Display("Creation date")]
+    public DateTime CreateDate { get; set; }
+
+    [Display("Subject")]
+    [JsonProperty("subject")]
+    public string Subject { get; set; }
+
+    [Display("Analysis URL")]
+    [JsonProperty("analyze_url")]
+    public string AnalyzeUrl { get; set; }
+
+    [JsonProperty("jobs")]
+    [Display("Analysis jobs")]
+    public IEnumerable<AnalysisJob> Jobs { get; set; }
+
+    [JsonProperty("summary")]
+    [Display("Summary")]
+    public AnalysisSummary Summary { get; set; }
+}
+
+public class AnalysisSummary
+{
+    [JsonProperty("in_queue_before")]
+    [Display("In queue before")]
+    public int InQueueBefore { get; set; }
+
+    [JsonProperty("total_segments")]
+    [Display("Total segments")]
+    public int TotalSegments { get; set; }
+
+    [JsonProperty("segments_analyzed")]
+    [Display("Segments analyzed")]
+    public int SegmentsAnalyzed { get; set; }
+
+    [JsonProperty("status")]
+    [Display("Status")]
+    public string Status { get; set; }
+
+    [JsonProperty("total_raw")]
+    [Display("Total raw")]
+    public int TotalRaw { get; set; }
+
+    [JsonProperty("total_equivalent")]
+    [Display("Total equivalent")]
+    public int TotalEquivalent { get; set; }
+
+    [JsonProperty("total_industry")]
+    [Display("Total industry")]
+    public int TotalIndustry { get; set; }
+
+    [JsonProperty("discount")]
+    [Display("Discount")]
+    public int Discount { get; set; }
+}
+
+public class AnalysisJob
+{
+    [JsonProperty("ID")]
+    [Display("Job ID")]
+    public string Id { get; set; }
+
+    [JsonProperty("source")]
+    [Display("Source code")]
+    public string SourceCode { get; set; }
+
+    [JsonProperty("source_name")]
+    [Display("Source name")]
+    public string SourceName { get; set; }
+
+    [JsonProperty("target")]
+    [Display("Target code")]
+    public string TargetCode { get; set; }
+
+    [JsonProperty("target_name")]
+    [Display("Target name")]
+    public string TargetName { get; set; }
+
+    [JsonProperty("total_raw")]
+    [Display("Total raw")]
+    public int TotalRaw { get; set; }
+
+    [JsonProperty("total_equivalent")]
+    [Display("Total equivalent")]
+    public int TotalEquivalent { get; set; }
+
+    [JsonProperty("total_industry")]
+    [Display("Total industry")]
+    public int TotalIndustry { get; set; }
+
+    [JsonProperty("count_unit")]
+    [Display("Count unit")]
+    public string CountUnit { get; set; }
 }

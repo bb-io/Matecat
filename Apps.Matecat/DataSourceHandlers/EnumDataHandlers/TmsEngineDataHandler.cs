@@ -7,6 +7,6 @@ public class TmsEngineDataHandler : EnumDataHandler
     protected override Dictionary<string, string> EnumValues => new()
     {
         { "0", "Disabled" },
-        { "1", "MyMemory" }
+        { "1", "MyMemory (Default)" }
     };
 }

@@ -42,4 +42,10 @@ public class ApiEndpoints
     public const string ImportGlossary = V2 + "/glossaries/import/";
 
     #endregion
+
+    #region Billing Models
+
+    public const string PayableRates = V2 + "/payable_rate";
+
+    #endregion
 }
