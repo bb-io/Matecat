@@ -1,4 +1,5 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
+using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Apps.Matecat.DataSourceHandlers.EnumDataHandlers
 {
-    public class SubjectDataHandler : EnumDataHandler
+    public class SubjectDataHandler : IStaticDataSourceHandler
     {
-        protected override Dictionary<string, string> EnumValues => new()
+        public Dictionary<string, string> GetData() => new()
         {
             {"general", "General"},
             {"accounting_finance", "Accounting & Finance"},

@@ -1,4 +1,5 @@
 ﻿using Apps.Matecat.Constants;
+using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Apps.Matecat.DataSourceHandlers.EnumDataHandlers
 {
-    public class DerivedStatusDataHandler : EnumDataHandler
+    public class DerivedStatusDataHandler : IStaticDataSourceHandler
     {
-        protected override Dictionary<string, string> EnumValues => new()
+        public Dictionary<string, string> GetData() => new()
         {
             {JobStatus.New, "New"},
             {JobStatus.InTranslation, "In translation"},
