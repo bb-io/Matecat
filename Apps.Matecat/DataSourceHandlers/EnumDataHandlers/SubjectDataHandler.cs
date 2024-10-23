@@ -14,7 +14,6 @@ namespace Apps.Matecat.DataSourceHandlers.EnumDataHandlers
         {
             {"general", "General"},
             {"accounting_finance", "Accounting & Finance"},
-            {"accounting_finance", "Accounting & Finance"},
             {"adwords", "Adwords"},
             {"aerospace_defence", "Aerospace / Defence"},
             {"architecture", "Architecture"},
