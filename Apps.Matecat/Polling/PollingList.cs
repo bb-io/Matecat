@@ -2,6 +2,7 @@
 using Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
 using Apps.Matecat.Models.Response.Job;
 using Apps.Matecat.Models.Response.Project;
+using Apps.Matecat.Polling.Models;
 using Apps.Matecat.RestSharp;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Authentication;
@@ -33,9 +34,9 @@ public class PollingList : BaseInvocable
     [PollingEvent("On analysis completed", "This event triggers when a project analysis completes")]
     public async Task<PollingEventResponse<string, Project>> OnAnalysisCompleted(
         PollingEventRequest<string> input, 
-        [PollingEventParameter][Display("Project ID and password")] string projectId)
+        [PollingEventParameter] ProjectIdentifier projectIdentifier)
     {
-        var endpoint = $"{ApiEndpoints.Projects}/{projectId}";
+        var endpoint = $"{ApiEndpoints.Projects}/{projectIdentifier.ProjectId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
 
         var response = await _client.ExecuteWithHandling<ProjectResponse>(request);
@@ -53,24 +54,24 @@ public class PollingList : BaseInvocable
 
     [PollingEvent("On job status changed", "This event triggers when a job changes its derived status")]
     public async Task<PollingEventResponse<string, Job>> OnJobStatusChanged(
-        PollingEventRequest<string> input, 
-        [PollingEventParameter][Display("Project ID and password")] string projectId,
-        [PollingEventParameter][Display("Job ID")] string jobId,
-        [PollingEventParameter][Display("New status")][StaticDataSource(typeof(DerivedStatusDataHandler))] string? derivedStatus)
+        PollingEventRequest<string> input,
+        [PollingEventParameter] ProjectIdentifier projectIdentifier,
+        [PollingEventParameter] JobIdentifier jobIdentifier,
+        [PollingEventParameter] OptionalDerivedStatus derivedStatus)
     {
-        var endpoint = $"{ApiEndpoints.Projects}/{projectId}";
+        var endpoint = $"{ApiEndpoints.Projects}/{projectIdentifier.ProjectId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
 
         var response = await _client.ExecuteWithHandling<ProjectResponse>(request);
         var project = response.Project;
 
-        var job = project.Jobs.Find(x => x.Id == jobId);
+        var job = project.Jobs.Find(x => x.Id == jobIdentifier.JobId);
 
         if (job == null) throw new Exception("A job with this ID was not found in this project.");
 
         return new()
         {
-            FlyBird = derivedStatus == null ? (input.Memory != null && job.DerivedStatus != input.Memory) : job.DerivedStatus == derivedStatus,
+            FlyBird = derivedStatus == null ? (input.Memory != null && job.DerivedStatus != input.Memory) : job.DerivedStatus == derivedStatus.DerivedStatus,
             Result = job,
             Memory = job.DerivedStatus,
         };
@@ -79,10 +80,10 @@ public class PollingList : BaseInvocable
     [PollingEvent("On project status changed", "This event triggers when a project changes its derived status")]
     public async Task<PollingEventResponse<string, Project>> OnProjectStatusChanged(
     PollingEventRequest<string> input,
-    [PollingEventParameter][Display("Project ID and password")] string projectId,
-    [PollingEventParameter][Display("New status")][StaticDataSource(typeof(DerivedStatusDataHandler))] string? derivedStatus)
+    [PollingEventParameter] ProjectIdentifier projectIdentifier,
+    [PollingEventParameter] OptionalDerivedStatus derivedStatus)
     {
-        var endpoint = $"{ApiEndpoints.Projects}/{projectId}";
+        var endpoint = $"{ApiEndpoints.Projects}/{projectIdentifier.ProjectId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
 
         var response = await _client.ExecuteWithHandling<ProjectResponse>(request);
@@ -90,7 +91,7 @@ public class PollingList : BaseInvocable
 
         return new()
         {
-            FlyBird = derivedStatus == null ? (input.Memory != null && project.DerivedStatus != input.Memory) : project.DerivedStatus == derivedStatus,
+            FlyBird = derivedStatus == null ? (input.Memory != null && project.DerivedStatus != input.Memory) : project.DerivedStatus == derivedStatus.DerivedStatus,
             Result = project,
             Memory = project.DerivedStatus,
         };
