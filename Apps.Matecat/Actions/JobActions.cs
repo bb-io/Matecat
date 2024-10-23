@@ -39,7 +39,7 @@ public class JobActions : BaseInvocable
 
     #region Actions
 
-    [Action("Download translation as ZIP", Description = "Download job translation as ZIP")]
+    [Action("Download job translated files as ZIP", Description = "Download job translation as ZIP")]
     public async Task<FileResponse> DownloadTranslationAsZip(
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
@@ -50,11 +50,11 @@ public class JobActions : BaseInvocable
 
         using var stream = new MemoryStream(response.RawBytes);
         var translation = await _fileManagementClient.UploadAsync(stream,
-            response.ContentType ?? MediaTypeNames.Application.Octet, $"{jobId}_translation");
+            response.ContentType ?? MediaTypeNames.Application.Zip, $"{jobId}_translation");
         return new(translation);
     }
 
-    [Action("Download translation", Description = "Download job translation")]
+    [Action("Download job translated files", Description = "Download job translation")]
     public async Task<FilesResponse> DownloadTranslation(
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
@@ -81,7 +81,7 @@ public class JobActions : BaseInvocable
         
         using var stream = new MemoryStream(response.RawBytes);
         var file = await _fileManagementClient.UploadAsync(stream, 
-            response.ContentType ?? MediaTypeNames.Application.Octet, $"{jobId}.tmx");
+            response.ContentType ?? MediaTypeNames.Application.Xml, $"{jobId}.tmx");
         return new(file);
     }
 

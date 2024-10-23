@@ -1,6 +1,7 @@
 ﻿using Apps.Matecat.DataSourceHandlers;
 using Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
 using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 
 namespace Apps.Matecat.Models.Request.Project;
@@ -19,7 +20,7 @@ public class CreateProjectRequest
     public IEnumerable<string> TargetLanguages { get; set; }
 
     [Display("TMS engine")]
-    [DataSource(typeof(TmsEngineDataHandler))]
+    [StaticDataSource(typeof(TmsEngineDataHandler))]
     public string? TmsEngine { get; set; }
 
     [Display("MT engine")]
@@ -27,13 +28,15 @@ public class CreateProjectRequest
     public string? MtEngine { get; set; }
 
     [Display("Private TM keys")]
+    [DataSource(typeof(PrivateTranslationMemoryDataHandler))]
     public IEnumerable<string>? TmKey { get; set; }
 
     [Display("Subject")]
+    [StaticDataSource(typeof(SubjectDataHandler))]
     public string? Subject { get; set; }
 
     [Display("Segmentation rule")]
-    [DataSource(typeof(SegmentationRuleDataHandler))]
+    [StaticDataSource(typeof(SegmentationRuleDataHandler))]
     public string? SegmentationRule { get; set; }
 
     [Display("Due date")]

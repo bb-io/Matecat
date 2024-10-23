@@ -12,6 +12,7 @@ using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using RestSharp;
 using Apps.Matecat.Dto;
+using Newtonsoft.Json;
 
 namespace Apps.Matecat.Actions;
 
@@ -57,6 +58,21 @@ public class ProjectActions : BaseInvocable
         }
 
         var response = await _client.ExecuteWithHandling<CreateProjectResponse>(request);
+
+        var creationStatusRequest = new MatecatRequest($"{ApiEndpoints.Projects}/{response.ProjectIdAndPassword}/creation_status", Method.Get, Creds);
+        var creationStatus = new ProjectCreationStatus { Status = 202, Message = "" };        
+
+        while(creationStatus.Status == 202)
+        {
+            creationStatus = await _client.ExecuteWithHandling<ProjectCreationStatus>(creationStatusRequest);
+            Thread.Sleep(3000);
+        }
+
+        if (creationStatus.Status != 200)
+        {
+            throw new Exception(creationStatus.Message);
+        }
+
         return await GetProject(response.ProjectIdAndPassword);
     }    
     

@@ -1,4 +1,6 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.Matecat.Constants;
+using Apps.Matecat.Models.Response.Job;
+using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Response.Project;
@@ -69,6 +71,20 @@ public class Project
 
     [JsonProperty("jobs")] 
     public List<Job.Job> Jobs { get; set; }
+
+    [Display("Derived status")]
+    public string DerivedStatus
+    {
+        get
+        {
+            var statusses = new List<string> { JobStatus.New, JobStatus.InTranslation, JobStatus.Translated, JobStatus.InRevision, JobStatus.Revised };
+            foreach(var status in statusses)
+            {
+                if (Jobs.Any(x => x.Status == status)) return status;
+            }
+            return JobStatus.Revised;
+        }
+    }
 }
 
 public class Analysis
@@ -121,16 +137,16 @@ public class AnalysisSummary
     public string Status { get; set; }
 
     [JsonProperty("total_raw")]
-    [Display("Total raw")]
+    [Display("Total word count")]
     public int TotalRaw { get; set; }
 
-    [JsonProperty("total_equivalent")]
-    [Display("Total equivalent")]
-    public int TotalEquivalent { get; set; }
-
     [JsonProperty("total_industry")]
-    [Display("Total industry")]
+    [Display("Industry weighted")]
     public int TotalIndustry { get; set; }
+
+    [JsonProperty("total_equivalent")]
+    [Display("Matecat weighted")]
+    public int TotalEquivalent { get; set; }
 
     [JsonProperty("discount")]
     [Display("Discount")]
@@ -160,16 +176,16 @@ public class AnalysisJob
     public string TargetName { get; set; }
 
     [JsonProperty("total_raw")]
-    [Display("Total raw")]
+    [Display("Total word count")]
     public int TotalRaw { get; set; }
 
-    [JsonProperty("total_equivalent")]
-    [Display("Total equivalent")]
-    public int TotalEquivalent { get; set; }
-
     [JsonProperty("total_industry")]
-    [Display("Total industry")]
+    [Display("Industry weighted")]
     public int TotalIndustry { get; set; }
+
+    [JsonProperty("total_equivalent")]
+    [Display("Matecat weighted")]
+    public int TotalEquivalent { get; set; }
 
     [JsonProperty("count_unit")]
     [Display("Count unit")]

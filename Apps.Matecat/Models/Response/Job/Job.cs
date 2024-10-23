@@ -1,4 +1,5 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.Matecat.Constants;
+using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Response.Job;
@@ -80,6 +81,7 @@ public class Job
     public Translator Translator { get; set; }
 
     [JsonProperty("urls")]
+    [Display("URLs")]
     public Urls Urls { get; set; }
 
     [JsonProperty("total_raw_wc")]
@@ -89,6 +91,26 @@ public class Job
     [JsonProperty("standard_wc")]
     [Display("Standard word count")]
     public int StandardWc { get; set; }
+
+    [JsonProperty("stats")]
+    [Display("Statistics")]
+    public Stats Stats { get; set; }
+
+    [Display("Derived status")]
+    public string DerivedStatus
+    {
+        get
+        {
+            var rawStats = Stats?.Raw;
+            if (rawStats == null) return JobStatus.New;
+            if (rawStats.New == rawStats.Total) return JobStatus.New;
+            if (rawStats.Translated != 0 && rawStats.New != 0) return JobStatus.InTranslation;
+            if (rawStats.Translated == rawStats.Total) return JobStatus.Translated;
+            if (rawStats.Translated != 0 && rawStats.Approved != 0) return JobStatus.InRevision;
+            if (rawStats.Approved == rawStats.Total) return JobStatus.Revised;
+            return JobStatus.New;
+        }
+    }
 }
 
 public class Urls
@@ -108,4 +130,42 @@ public class Urls
     [JsonProperty("xliff_download_url")]
     [Display("XLIFF download URL")]
     public string XliffDownloadUrl { get; set; }
+}
+
+public class Stats
+{
+    [JsonProperty("equivalent")]
+    [Display("Matecat weighted")]
+    public StatsNumbers Equivalent { get; set; }
+
+    [JsonProperty("raw")]
+    [Display("Total raw")]
+    public StatsNumbers Raw { get; set; }
+}
+
+public class StatsNumbers
+{
+    [JsonProperty("new")]
+    [Display("New")]    
+    public double New { get; set; }
+
+    [JsonProperty("draft")]
+    [Display("Draft")]
+    public double Draft { get; set; }
+
+    [JsonProperty("translated")]
+    [Display("Translated")]
+    public double Translated { get; set; }
+
+    [JsonProperty("approved")]
+    [Display("Approved")]
+    public double Approved { get; set; }
+
+    [JsonProperty("approved2")]
+    [Display("Approved 2")]
+    public double Approved2 { get; set; }
+
+    [JsonProperty("total")]
+    [Display("Total")]
+    public double Total { get; set; }
 }
