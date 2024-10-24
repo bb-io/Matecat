@@ -71,7 +71,7 @@ public class PollingList : BaseInvocable
 
         return new()
         {
-            FlyBird = derivedStatus == null ? (input.Memory != null && job.DerivedStatus != input.Memory) : job.DerivedStatus == derivedStatus.DerivedStatus,
+            FlyBird = derivedStatus.DerivedStatus == null ? (input.Memory != null && job.DerivedStatus != input.Memory) : job.DerivedStatus == derivedStatus.DerivedStatus,
             Result = job,
             Memory = job.DerivedStatus,
         };
@@ -91,7 +91,7 @@ public class PollingList : BaseInvocable
 
         return new()
         {
-            FlyBird = derivedStatus == null ? (input.Memory != null && project.DerivedStatus != input.Memory) : project.DerivedStatus == derivedStatus.DerivedStatus,
+            FlyBird = derivedStatus.DerivedStatus == null ? (input.Memory != null && project.DerivedStatus != input.Memory) : project.DerivedStatus == derivedStatus.DerivedStatus,
             Result = project,
             Memory = project.DerivedStatus,
         };
