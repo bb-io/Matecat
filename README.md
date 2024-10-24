@@ -65,6 +65,12 @@ See the [Matecat API documentation](https://www.matecat.com/api/docs#/) for a de
 - **On project status changed** is triggered when a project changes its derived status. F.e. if all jobs in a project change their status to translated.
 - **On job status changed** is triggered when a job changes its derived status. F.e. when all the segments in a job are translated the status changes to translated.
 
+## Example
+
+![1729768345607](image/README/1729768345607.png)
+
+In this example we see a translation being created from a Slack message and its attachments. When the Matecat analysis is complete we send a message with the link to Slack. Then when all the translations are completed we loop through all jobs and download the files. We then send the translated files back to Slack.
+
 ## Missing features
 
 - Translation Versions
