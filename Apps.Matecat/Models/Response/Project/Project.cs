@@ -80,9 +80,9 @@ public class Project
             var statusses = new List<string> { JobStatus.New, JobStatus.InTranslation, JobStatus.Translated, JobStatus.InRevision, JobStatus.Revised };
             foreach(var status in statusses)
             {
-                if (Jobs.Any(x => x.Status == status)) return status;
+                if (Jobs.Any(x => x.DerivedStatus == status)) return status;
             }
-            return JobStatus.Revised;
+            return JobStatus.New;
         }
     }
 }
