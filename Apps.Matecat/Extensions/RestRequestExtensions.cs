@@ -19,5 +19,5 @@ public static class RestRequestExtensions
     }
 
     public static RestRequest WithFile(this RestRequest request, byte[] file, string fileName)
-        => request.AddFile("files", file, fileName);
+        => request.AddFile($"files[{fileName}]", file, fileName);
 }

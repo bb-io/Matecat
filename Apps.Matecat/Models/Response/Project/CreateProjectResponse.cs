@@ -6,12 +6,13 @@ namespace Apps.Matecat.Models.Response.Project;
 public class CreateProjectResponse
 {
     [JsonProperty("id_project")]
-    [Display("Project")]
+    [DefinitionIgnore]
     public string ProjectId { get; set; }
 
     [JsonProperty("project_pass")]
-    [Display("Password")]
+    [DefinitionIgnore]
     public string ProjectPassword { get; set; }
 
-    [Display("Project ID and password")] public string ProjectIdAndPassword => $"{ProjectId}/{ProjectPassword}";
+    [Display("Project ID and password")] 
+    public string ProjectIdAndPassword => $"{ProjectId}/{ProjectPassword}";
 }

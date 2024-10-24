@@ -1,10 +1,11 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
+using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
 
 namespace Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
 
-public class TranslationIssueCategoryDataSource : EnumDataHandler
+public class TranslationIssueCategoryDataSource : IStaticDataSourceHandler
 {
-    protected override Dictionary<string, string> EnumValues => new()
+    public Dictionary<string, string> GetData() => new()
     {
         {"27207467", "Style (readability, consistent style and tone)"},
         {"27207468", "Tag issues (mismatches, whitespaces)"},
