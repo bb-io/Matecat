@@ -12,11 +12,11 @@ public class CreateProjectRequest
     public string ProjectName { get; set; }
 
     [Display("Source language")]
-    [DataSource(typeof(LanguageDataHandler))]
+    [StaticDataSource(typeof(LanguageDataHandler))]
     public string SourceLanguage { get; set; }
 
     [Display("Target languages")]
-    [DataSource(typeof(LanguageDataHandler))]
+    [StaticDataSource(typeof(LanguageDataHandler))]
     public IEnumerable<string> TargetLanguages { get; set; }
 
     [Display("TMS engine")]
