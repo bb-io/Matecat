@@ -28,7 +28,7 @@ public class CreateProjectRequest
     public string? MtEngine { get; set; }
 
     [Display("Private TM keys")]
-    [DataSource(typeof(PrivateTranslationMemoryDataHandler))]
+    [DataSource(typeof(TranslationMemoryDataHandler))]
     public IEnumerable<string>? TmKey { get; set; }
 
     [Display("Subject")]
