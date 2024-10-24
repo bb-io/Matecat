@@ -75,7 +75,7 @@ public class Job
 
     [JsonProperty("private_tm_key")]
     [Display("Private TM keys")]
-    public IEnumerable<string> PrivateTmKeys { get; set; }
+    public IEnumerable<KeyModel> PrivateTmKeys { get; set; }
 
     [JsonProperty("translator")]
     public Translator Translator { get; set; }
@@ -111,6 +111,17 @@ public class Job
             return JobStatus.New;
         }
     }
+}
+
+public class KeyModel
+{
+    [JsonProperty("key")]
+    [Display("Key")]
+    public string Key { get; set; }
+
+    [JsonProperty("name")]
+    [Display("Name")]
+    public string Name { get; set; }
 }
 
 public class Urls
