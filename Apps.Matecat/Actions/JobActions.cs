@@ -10,6 +10,8 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using RestSharp;
+using System.IO;
+using Blackbird.Applications.Sdk.Common.Files;
 
 namespace Apps.Matecat.Actions;
 
@@ -39,8 +41,8 @@ public class JobActions : BaseInvocable
 
     #region Actions
 
-    [Action("Download job translated files as ZIP", Description = "Download job translation as ZIP")]
-    public async Task<FileResponse> DownloadTranslationAsZip(
+    [Action("Download job translated files", Description = "Download all translated files for this job")]
+    public async Task<FilesResponse> DownloadTranslations(
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
     {
@@ -49,25 +51,22 @@ public class JobActions : BaseInvocable
         var response = await _client.ExecuteWithHandling(request);
 
         using var stream = new MemoryStream(response.RawBytes);
-        var translation = await _fileManagementClient.UploadAsync(stream,
-            response.ContentType ?? MediaTypeNames.Application.Zip, $"{jobId}_translation");
-        return new(translation);
-    }
+        if (response.ContentType == MediaTypeNames.Application.Zip)
+        {            
+            var zipEntries = await stream.GetFilesFromZip();
+            var files = (await Task.WhenAll(zipEntries
+                .Select(async file =>
+                    await _fileManagementClient.UploadAsync(file.FileStream, MimeTypes.GetMimeType(file.UploadName),
+                        file.UploadName)))).ToList();
 
-    [Action("Download job translated files", Description = "Download job translation")]
-    public async Task<FilesResponse> DownloadTranslation(
-        [ActionParameter] [Display("Job ID and password")]
-        string jobId)
-    {
-        var archive = (await DownloadTranslationAsZip(jobId)).File;
-        var archiveStream = await _fileManagementClient.DownloadAsync(archive);
-        var zipEntries = await archiveStream.GetFilesFromZip();
-        var files = (await Task.WhenAll(zipEntries
-            .Select(async file =>
-                await _fileManagementClient.UploadAsync(file.FileStream, MediaTypeNames.Application.Octet,
-                    file.UploadName)))).ToList();
+            return new(files);
+        }
 
-        return new(files);
+        var disposition = response.ContentHeaders?.ToList()?.Find(x => x.Name == "Content-Disposition")?.Value?.ToString();
+        var fileName = disposition != null ? new ContentDisposition(disposition).FileName : jobId.Split('/')[0];
+
+        var translation = await _fileManagementClient.UploadAsync(stream, MimeTypes.GetMimeType(fileName), fileName);
+        return new FilesResponse(new List<FileReference> { translation });
     }
 
     [Action("Download job TMX", Description = "Download TMX of a job")]
