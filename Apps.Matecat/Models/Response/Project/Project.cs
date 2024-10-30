@@ -1,5 +1,4 @@
 ﻿using Apps.Matecat.Constants;
-using Apps.Matecat.Models.Response.Job;
 using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 

@@ -11,6 +11,8 @@ using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using RestSharp;
 using System.IO;
+using Apps.Matecat.Extensions;
+using Apps.Matecat.Models.Request.Job;
 using Blackbird.Applications.Sdk.Common.Files;
 
 namespace Apps.Matecat.Actions;
@@ -94,6 +96,24 @@ public class JobActions : BaseInvocable
 
         var response = await _client.ExecuteWithHandling<JobResponse>(request);
         return response.Job;
+    }
+    
+    [Action("Assign job", Description = "Assign a job to a translator")]
+    public async Task<TranslatorJobResponse> AssignJob([ActionParameter] AssignJobRequest assignJobRequest)
+    {
+        var endpoint = $"{ApiEndpoints.Jobs}/{assignJobRequest.JobId}/translator";
+        var request = new MatecatRequest(endpoint, Method.Post, Creds)
+            .WithFormData(new
+            {
+                email = assignJobRequest.Email,
+                delivery_date = new DateTimeOffset(assignJobRequest.DeliveryDate).ToUnixTimeSeconds(),
+                timezone = assignJobRequest.Timezone
+            }, isMultipartFormData: true);
+
+        var result = await _client.ExecuteWithHandling<AssignJobResponse>(request);
+        result.Job.Translator.SetDeliveryDate();
+        
+        return result.Job;
     }
 
     [Action("Cancel job", Description = "Cancel a job")]

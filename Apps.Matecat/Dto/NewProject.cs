@@ -1,14 +1,6 @@
-﻿using Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
-using Apps.Matecat.DataSourceHandlers;
-using Blackbird.Applications.Sdk.Common.Dynamic;
-using Blackbird.Applications.Sdk.Common;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using Apps.Matecat.Models.Request.Project;
+using Apps.Matecat.Utils.Converter;
 
 namespace Apps.Matecat.Dto
 {
@@ -39,7 +31,7 @@ namespace Apps.Matecat.Dto
         public string? SegmentationRule { get; set; }
 
         [JsonProperty("due_date")]
-        public DateTime? DueDate { get; set; }
+        public string? DueDate { get; set; }
 
         [JsonProperty("id_team")]
         public string? IdTeam { get; set; }
@@ -69,7 +61,9 @@ namespace Apps.Matecat.Dto
             TmKey = request.TmKey != null ? string.Join(',', request.TmKey) : null;
             Subject = request.Subject;
             SegmentationRule = request.SegmentationRule;
-            DueDate = request.DueDate;
+            DueDate = request.DueDate.HasValue 
+                ? new DateTimeOffset(request.DueDate.Value).ToUnixTimeSeconds().ToString() 
+                : null;
             IdTeam = request.IdTeam;
             LexiQa = request.LexiQa.HasValue ? (request.LexiQa.Value ? 1 : 0) : 0;
             Speech2Text = request.Speech2Text.HasValue ? (request.Speech2Text.Value ? 1 : 0) : 0;

@@ -17,12 +17,12 @@ using Newtonsoft.Json;
 namespace Apps.Matecat.Actions;
 
 [ActionList]
-public class ProjectActions : BaseInvocable
+public class ProjectActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient)
+    : BaseInvocable(invocationContext)
 {
     #region Fields
 
-    private readonly MatecatClient _client;
-    private readonly IFileManagementClient _fileManagementClient;
+    private readonly MatecatClient _client = new();
 
     private IEnumerable<AuthenticationCredentialsProvider> Creds =>
         InvocationContext.AuthenticationCredentialsProviders;
@@ -30,13 +30,6 @@ public class ProjectActions : BaseInvocable
     #endregion
 
     #region Constructors
-
-    public ProjectActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) 
-        : base(invocationContext)
-    {
-        _client = new();
-        _fileManagementClient = fileManagementClient;
-    }
 
     #endregion
 
@@ -52,7 +45,7 @@ public class ProjectActions : BaseInvocable
 
         foreach(var file in fileData.Files)
         {
-            var fileStream = await _fileManagementClient.DownloadAsync(file);
+            var fileStream = await fileManagementClient.DownloadAsync(file);
             var fileBytes = await fileStream.GetByteData();
             request = request.WithFile(fileBytes, file.Name);
         }
