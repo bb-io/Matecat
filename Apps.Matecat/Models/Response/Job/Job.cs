@@ -127,7 +127,7 @@ public class KeyModel
 public class Urls
 {
     [JsonProperty("translate_url")]
-    [Display("Transalte URL")]
+    [Display("Translate URL")]
     public string TranslateUrl { get; set; }
 
     [JsonProperty("original_download_url")]

@@ -1,14 +1,6 @@
-﻿using Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
-using Apps.Matecat.DataSourceHandlers;
-using Blackbird.Applications.Sdk.Common.Dynamic;
-using Blackbird.Applications.Sdk.Common;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using Apps.Matecat.Models.Request.Project;
+using Apps.Matecat.Utils.Converter;
 
 namespace Apps.Matecat.Dto
 {
@@ -38,7 +30,7 @@ namespace Apps.Matecat.Dto
         [JsonProperty("segmentation_rule")]
         public string? SegmentationRule { get; set; }
 
-        [JsonProperty("due_date")]
+        [JsonProperty("due_date"), JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime? DueDate { get; set; }
 
         [JsonProperty("id_team")]
