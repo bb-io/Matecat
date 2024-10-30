@@ -1,10 +1,11 @@
 ﻿using Blackbird.Applications.Sdk.Common;
+using Newtonsoft.Json;
 
 namespace Apps.Matecat.Models.Response.Job;
 
 public class JobChunks
 {
-    [Display("Job ID")]
+    [Display("Job ID"), JsonProperty("id")]
     public string JobId { get; set; } = string.Empty;
     
     [Display("Chunks")]
