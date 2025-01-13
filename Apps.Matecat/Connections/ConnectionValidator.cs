@@ -1,11 +1,7 @@
-﻿
-using Apps.Matecat.Actions;
-using Apps.Matecat.Constants;
+﻿using Apps.Matecat.Constants;
 using Apps.Matecat.RestSharp;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Connections;
-using Blackbird.Applications.Sdk.Common.Invocation;
-using DocumentFormat.OpenXml.Drawing;
 using RestSharp;
 
 namespace Apps.Matecat.Connections
@@ -17,6 +13,7 @@ namespace Apps.Matecat.Connections
         {
             var client = new MatecatClient();
             var request = new MatecatRequest(ApiEndpoints.Teams, Method.Get, authProviders);
+            
             try
             {
                 await client.ExecuteWithHandling(request);

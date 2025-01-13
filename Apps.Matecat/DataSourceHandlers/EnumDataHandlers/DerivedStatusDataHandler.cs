@@ -1,23 +1,22 @@
 ﻿using Apps.Matecat.Constants;
 using Blackbird.Applications.Sdk.Common.Dictionaries;
-using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 
-namespace Apps.Matecat.DataSourceHandlers.EnumDataHandlers
+namespace Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
+
+public class DerivedStatusDataHandler : IStaticDataSourceItemHandler
 {
-    public class DerivedStatusDataHandler : IStaticDataSourceHandler
+    private static Dictionary<string, string> Data => new()
     {
-        public Dictionary<string, string> GetData() => new()
-        {
-            {JobStatus.New, "New"},
-            {JobStatus.InTranslation, "In translation"},
-            {JobStatus.Translated, "Translated"},
-            {JobStatus.InRevision, "In revision"},
-            {JobStatus.Revised, "Revised"},
-        };
+        {JobStatus.New, "New"},
+        {JobStatus.InTranslation, "In translation"},
+        {JobStatus.Translated, "Translated"},
+        {JobStatus.InRevision, "In revision"},
+        {JobStatus.Revised, "Revised"},
+    };
+
+    public IEnumerable<DataSourceItem> GetData()
+    {
+        return Data.Select(x => new DataSourceItem(x.Key, x.Value));
     }
 }

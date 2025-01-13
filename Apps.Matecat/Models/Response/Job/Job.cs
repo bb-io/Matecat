@@ -65,9 +65,8 @@ public class Job
     [Display("Overall quality")]
     public string QualityOverall { get; set; }
 
-    [JsonProperty("pee")] 
-    [Display("Pee")] 
-    public int Pee { get; set; }
+    [JsonProperty("pee"), Display("Pee")] 
+    public double Pee { get; set; }
 
     [JsonProperty("tte")] 
     [Display("Tte")] 

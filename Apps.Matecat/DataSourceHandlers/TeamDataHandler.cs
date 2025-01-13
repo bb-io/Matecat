@@ -9,16 +9,13 @@ using RestSharp;
 
 namespace Apps.Matecat.DataSourceHandlers;
 
-public class TeamDataHandler : BaseInvocable, IAsyncDataSourceHandler
+public class TeamDataHandler(InvocationContext invocationContext)
+    : BaseInvocable(invocationContext), IAsyncDataSourceItemHandler
 {
     private IEnumerable<AuthenticationCredentialsProvider> Creds =>
         InvocationContext.AuthenticationCredentialsProviders;
-    
-    public TeamDataHandler(InvocationContext invocationContext) : base(invocationContext)
-    {
-    }
 
-    public async Task<Dictionary<string, string>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
+    public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
     {
         var request = new MatecatRequest(ApiEndpoints.Teams, Method.Get, Creds);
         var items = await new MatecatClient().ExecuteWithHandling<AllTeamsResponse>(request);
@@ -27,7 +24,6 @@ public class TeamDataHandler : BaseInvocable, IAsyncDataSourceHandler
             .Where(x => context.SearchString is null ||
                         x.Name.Contains(context.SearchString, StringComparison.OrdinalIgnoreCase))
             .OrderByDescending(x => x.CreatedAt)
-            .Take(20)
-            .ToDictionary(x => x.Id, x => x.Name);
+            .Select(x => new DataSourceItem(x.Id, x.Name));
     }
 }
