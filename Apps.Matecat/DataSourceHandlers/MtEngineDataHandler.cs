@@ -1,30 +1,21 @@
 ﻿using Apps.Matecat.Constants;
-using Apps.Matecat.Models.Response;
+using Apps.Matecat.Dto;
 using Apps.Matecat.RestSharp;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Apps.Matecat.Dto;
 
 namespace Apps.Matecat.DataSourceHandlers
 {
-    public class MtEngineDataHandler : BaseInvocable, IAsyncDataSourceHandler
+    public class MtEngineDataHandler(InvocationContext invocationContext)
+        : BaseInvocable(invocationContext), IAsyncDataSourceItemHandler
     {
         private IEnumerable<AuthenticationCredentialsProvider> Creds =>
             InvocationContext.AuthenticationCredentialsProviders;
 
-        public MtEngineDataHandler(InvocationContext invocationContext) : base(invocationContext)
-        {
-        }
-
-        public async Task<Dictionary<string, string>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
+        public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
         {
             var request = new MatecatRequest(ApiEndpoints.Engines, Method.Get, Creds);
             var items = await new MatecatClient().ExecuteWithHandling<EngineDto[]>(request);
@@ -40,7 +31,9 @@ namespace Apps.Matecat.DataSourceHandlers
                             x.Name.Contains(context.SearchString, StringComparison.OrdinalIgnoreCase))
                 .ToDictionary(x => x.Id.ToString(), x => x.Name);
 
-            return new List<Dictionary<string, string>>() { standard, extra }.SelectMany(dict => dict).ToDictionary();
+            return new List<Dictionary<string, string>> { standard, extra }
+                .SelectMany(dict => dict)
+                .Select(x => new DataSourceItem(x.Key, x.Value));
         }
     }
 }

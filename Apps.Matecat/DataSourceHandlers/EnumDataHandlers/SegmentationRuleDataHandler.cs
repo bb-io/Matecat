@@ -1,19 +1,19 @@
 ﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
-using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 
 namespace Apps.Matecat.DataSourceHandlers.EnumDataHandlers
 {
-    public class SegmentationRuleDataHandler : IStaticDataSourceHandler
+    public class SegmentationRuleDataHandler : IStaticDataSourceItemHandler
     {
-        public Dictionary<string, string> GetData() => new()
+        private static Dictionary<string, string> Data => new()
         {
             {"", "General"},
             {"patent", "Patent"}
         };
+        
+        public IEnumerable<DataSourceItem> GetData()
+        {
+            return Data.Select(x => new DataSourceItem(x.Key, x.Value));
+        }
     }
 }
