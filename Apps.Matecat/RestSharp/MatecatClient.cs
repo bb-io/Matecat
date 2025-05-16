@@ -24,13 +24,19 @@ public class MatecatClient() : RestClient(new RestClientOptions { BaseUrl = new(
 
     private Exception ConfigureErrorException(RestResponse response)
     {
-        var errorsResponse = JsonConvert.DeserializeObject<ErrorsResponse>(response.Content);
+        try
+        {
+            var errorsResponse = JsonConvert.DeserializeObject<ErrorsResponse>(response.Content!);
+            if (errorsResponse?.Errors is not null && errorsResponse.Errors.Any())
+                return GetMultipleErrors(errorsResponse);
 
-        if (errorsResponse.Errors is not null)
-            return GetMultipleErrors(errorsResponse);
-        
-        var error = JsonConvert.DeserializeObject<Error>(response.Content);
-        return new PluginApplicationException(error.Message);
+            var error = JsonConvert.DeserializeObject<Error>(response.Content!);
+            return new PluginApplicationException(error?.Message ?? response.StatusDescription!);
+        }
+        catch (JsonException)
+        {
+            return new PluginApplicationException($"Unexpected error format: {response.StatusCode} - {response.Content}");
+        }
     }
 
     private Exception GetMultipleErrors(ErrorsResponse errorsResponse)
