@@ -356,3 +356,4 @@ healthchecksdb
 *.env
 /ConsoleApp1
 /Tests.Matecat/appsettings.json
+/Tests.Matecat/appsettings.json
