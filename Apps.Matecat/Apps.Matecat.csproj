@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <Product>Matecat</Product>
     <Description>Free and open source online CAT tool</Description>
-    <Version>1.2.6</Version>
+    <Version>1.2.7</Version>
     <AssemblyName>Apps.Matecat</AssemblyName>
     <LangVersion>12</LangVersion>
   </PropertyGroup>

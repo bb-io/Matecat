@@ -14,6 +14,10 @@ using System.IO;
 using Apps.Matecat.Extensions;
 using Apps.Matecat.Models.Request.Job;
 using Blackbird.Applications.Sdk.Common.Files;
+using Newtonsoft.Json;
+using Blackbird.Applications.Sdk.Utils.Utilities;
+using DocumentFormat.OpenXml.Presentation;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 
 namespace Apps.Matecat.Actions;
 
@@ -84,6 +88,29 @@ public class JobActions : BaseInvocable
         var file = await _fileManagementClient.UploadAsync(stream, 
             response.ContentType ?? MediaTypeNames.Application.Xml, $"{jobId}.tmx");
         return new(file);
+    }
+
+
+    [Action("Download job as XLIFF", Description = "Download XLIFF of a job")]
+    public async Task<FileResponse> DownloadXliff(
+       [ActionParameter] [Display("Job ID and password")]
+        string jobId)
+    {
+        var jobEndpoint = $"{ApiEndpoints.Jobs}/{jobId}";
+        var jobRequest = new MatecatRequest(jobEndpoint, Method.Get, Creds);
+        var jobResponse = await _client.ExecuteWithHandling(jobRequest);
+        var jobData = JsonConvert.DeserializeObject<JobResponse>(jobResponse.Content);
+        var xliffUrl = jobData.Job.Chunks?.FirstOrDefault()?.Urls?.XliffDownloadUrl;
+
+        if (string.IsNullOrEmpty(xliffUrl))
+        {
+            throw new PluginApplicationException("XLIFF download URL not found in the response.");
+        }
+
+        var filename = jobId.Replace("/", "_") + ".xliff";
+        var file = await FileDownloader.DownloadFileBytes(xliffUrl);
+        var fileRef = await _fileManagementClient.UploadAsync(file.FileStream, file.ContentType ?? MediaTypeNames.Application.Xml, filename);
+        return new FileResponse(fileRef);
     }
 
     [Action("Get job", Description = "Get all information about a Job")]
