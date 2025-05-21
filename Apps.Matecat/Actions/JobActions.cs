@@ -75,7 +75,7 @@ public class JobActions : BaseInvocable
         return new FilesResponse(new List<FileReference> { translation });
     }
 
-    [Action("Download job file TMX", Description = "Download TMX of a job")]
+    [Action("Download job file as TMX", Description = "Download TMX of a job")]
     public async Task<FileResponse> DownloadTmx(
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
