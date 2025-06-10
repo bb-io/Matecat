@@ -52,7 +52,7 @@ public class JobActions : BaseInvocable
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
     {
-        var endpoint = $"{ApiEndpoints.Translation}/{jobId}";
+        var endpoint = $"/api/v3{ApiEndpoints.Translation}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
         var response = await _client.ExecuteWithHandling(request);
 
