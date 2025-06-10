@@ -17,5 +17,16 @@ namespace Tests.Matecat
             Console.WriteLine("Returned project object:\n" + json);
             Assert.IsNotNull(result.File);
         }
+
+        [TestMethod]
+        public async Task DownloadJobTranslatedFiles_IsSuccess()
+        {
+            var actions = new JobActions(InvocationContext, FileManager);
+            var result = await actions.DownloadTranslations("11303625/ad5ac0275645");
+
+            string json = JsonConvert.SerializeObject(result, Formatting.Indented);
+            Console.WriteLine("Returned project object:\n" + json);
+            Assert.IsNotNull(result);
+        }
     }
 }
