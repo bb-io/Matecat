@@ -62,7 +62,7 @@ public class JobActions : BaseInvocable
         }
         catch (PluginApplicationException ex) when (ex.Message.Contains("Typed property API\\V2\\DownloadFileController::$job must be an instance of Jobs_JobStruct, null used"))
         {
-            throw new PluginApplicationException("Job not found or password was changed.");
+            throw new PluginApplicationException("The job couldn’t be found or password may have changed.");
         }
 
         using var stream = new MemoryStream(response.RawBytes);
