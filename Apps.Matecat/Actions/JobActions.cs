@@ -59,7 +59,16 @@ public class JobActions : BaseInvocable
 
         var endpoint = $"/api/v3{ApiEndpoints.Translation}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
-        var response = await _client.ExecuteWithHandling(request);
+
+        RestResponse response;
+        try
+        {
+            response = await _client.ExecuteWithHandling(request);
+        }
+        catch (PluginApplicationException ex) when (ex.Message.Contains("Typed property API\\V2\\DownloadFileController::$job must be an instance of Jobs_JobStruct, null used"))
+        {
+            throw new PluginApplicationException("The job couldn’t be found or password may have changed.");
+        }
 
         if (response.RawBytes == null || response.RawBytes.Length == 0)
         {
