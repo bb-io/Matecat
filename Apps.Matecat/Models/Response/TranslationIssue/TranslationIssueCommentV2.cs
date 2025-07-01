@@ -6,7 +6,7 @@ namespace Apps.Matecat.Models.Response.TranslationIssue;
 public class TranslationIssueCommentV2
 {
     [JsonProperty("id")]
-    [Display("ID")]
+    [Display("Comment ID")]
     public string Id { get; set; }
 
     [JsonProperty("uid")]

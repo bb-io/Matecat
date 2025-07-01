@@ -10,6 +10,6 @@ public class TranslationIssueRequest
     [Display("Segment ID")]
     public string SegmentId { get; set; }
     
-    [Display("Issue ID")]
+    [Display("Translation issue ID")]
     public string IssueId { get; set; }
 }

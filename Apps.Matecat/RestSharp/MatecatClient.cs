@@ -2,23 +2,45 @@
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Net;
 
 namespace Apps.Matecat.RestSharp;
 
 public class MatecatClient() : RestClient(new RestClientOptions { BaseUrl = new("https://www.matecat.com") })
 {
+    private const int MaxRetries = 5;
+    private const int InitialDelayMs = 1000;
+
     public async Task<T> ExecuteWithHandling<T>(RestRequest request)
     {
         var response = await ExecuteWithHandling(request);
         return JsonConvert.DeserializeObject<T>(response.Content!)!;
-    }    
-    
+    }
+
     public async Task<RestResponse> ExecuteWithHandling(RestRequest request)
     {
-        var response = await ExecuteAsync(request);
-        if (response.IsSuccessStatusCode)
-            return response;
+        int delay = InitialDelayMs;
+        RestResponse? response = null;
 
+        for (int attempt = 1; attempt <= MaxRetries; attempt++)
+        {
+            response = await ExecuteAsync(request);
+
+            if (response.IsSuccessful)
+                return response;
+
+            if (attempt < MaxRetries &&
+                (response.StatusCode == HttpStatusCode.InternalServerError ||
+                 response.StatusCode == HttpStatusCode.ServiceUnavailable ||
+                 response.StatusCode == HttpStatusCode.BadRequest ||
+                 response.StatusCode == HttpStatusCode.TooManyRequests))
+            {
+                await Task.Delay(delay);
+                delay *= 2;
+                continue;
+            }
+            break;
+        }
         throw ConfigureErrorException(response);
     }
 
