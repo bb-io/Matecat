@@ -22,7 +22,7 @@ namespace Tests.Matecat
         public async Task DownloadJobTranslatedFiles_IsSuccess()
         {
             var actions = new JobActions(InvocationContext, FileManager);
-            var result = await actions.DownloadTranslations("11303625/ad5ac0275645");
+            var result = await actions.DownloadTranslations("11368472/64f4c59aa93e");
 
             string json = JsonConvert.SerializeObject(result, Formatting.Indented);
             Console.WriteLine("Returned project object:\n" + json);

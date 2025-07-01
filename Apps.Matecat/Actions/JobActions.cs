@@ -52,6 +52,11 @@ public class JobActions : BaseInvocable
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
     {
+        if(string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var endpoint = $"/api/v3{ApiEndpoints.Translation}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
 
@@ -63,6 +68,11 @@ public class JobActions : BaseInvocable
         catch (PluginApplicationException ex) when (ex.Message.Contains("Typed property API\\V2\\DownloadFileController::$job must be an instance of Jobs_JobStruct, null used"))
         {
             throw new PluginApplicationException("The job couldn’t be found or password may have changed.");
+        }
+
+        if (response.RawBytes == null || response.RawBytes.Length == 0)
+        {
+            throw new PluginApplicationException("Empty response received from Matecat API. Please check your inputs and try again");
         }
 
         using var stream = new MemoryStream(response.RawBytes);
@@ -89,6 +99,11 @@ public class JobActions : BaseInvocable
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
     {
+        if (string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var endpoint = $"{ApiEndpoints.Tmx}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
         var response = await _client.ExecuteWithHandling(request);
@@ -105,6 +120,11 @@ public class JobActions : BaseInvocable
        [ActionParameter] [Display("Job ID and password")]
         string jobId)
     {
+        if (string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var jobEndpoint = $"{ApiEndpoints.Jobs}/{jobId}";
         var jobRequest = new MatecatRequest(jobEndpoint, Method.Get, Creds);
         var jobResponse = await _client.ExecuteWithHandling(jobRequest);
@@ -127,6 +147,11 @@ public class JobActions : BaseInvocable
         [ActionParameter] [Display("Job ID and password")]
         string jobId)
     {
+        if (string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var endpoint = $"{ApiEndpoints.Jobs}/{jobId}";
         var request = new MatecatRequest(endpoint, Method.Get, Creds);
 
@@ -155,6 +180,11 @@ public class JobActions : BaseInvocable
     [Action("Cancel job", Description = "Cancel a job")]
     public Task CancelJob([ActionParameter] [Display("Job ID and password")] string jobId)
     {
+        if (string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var endpoint = $"{ApiEndpoints.Jobs}/{jobId}/cancel";
         var request = new MatecatRequest(endpoint, Method.Post, Creds);
 
@@ -164,6 +194,11 @@ public class JobActions : BaseInvocable
     [Action("Archive job", Description = "Archive a job")]
     public Task ArchiveJob([ActionParameter] [Display("Job ID and password")] string jobId)
     {
+        if (string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var endpoint = $"{ApiEndpoints.Jobs}/{jobId}/archive";
         var request = new MatecatRequest(endpoint, Method.Post, Creds);
 
@@ -173,6 +208,11 @@ public class JobActions : BaseInvocable
     [Action("Activate job", Description = "Activate a job")]
     public Task ActivateJob([ActionParameter] [Display("Job ID and password")] string jobId)
     {
+        if (string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var endpoint = $"{ApiEndpoints.Jobs}/{jobId}/active";
         var request = new MatecatRequest(endpoint, Method.Post, Creds);
 
@@ -185,6 +225,11 @@ public class JobActions : BaseInvocable
         string jobId,
         [ActionParameter] [Display("From ID")] string? fromId)
     {
+        if (string.IsNullOrWhiteSpace(jobId))
+        {
+            throw new PluginMisconfigurationException("Job ID cannot be null or empty. Please provide a valid job ID.");
+        }
+
         var endpoint = $"{ApiEndpoints.Jobs}/{jobId}/comments";
 
         if (fromId is not null)

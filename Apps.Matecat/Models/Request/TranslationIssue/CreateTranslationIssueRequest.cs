@@ -25,7 +25,7 @@ public class CreateTranslationIssueRequest
     public int VersionNumber { get; set; }
 
     [JsonProperty("id_category")]
-    [Display("Category")]
+    [Display("Category ID")]
     [StaticDataSource(typeof(TranslationIssueCategoryDataSource))]
     public string CategoryId { get; set; }
 

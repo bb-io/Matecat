@@ -14,7 +14,7 @@ public class TranslationIssueCommentV3
     public DateTime CreatedAt { get; set; }
 
     [JsonProperty("id")]
-    [Display("ID")]
+    [Display("Comment ID")]
     public string Id { get; set; }
 
     [JsonProperty("id_category")]

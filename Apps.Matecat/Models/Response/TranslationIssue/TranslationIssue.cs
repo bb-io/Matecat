@@ -14,7 +14,7 @@ public class TranslationIssue
     public string CreatedAt { get; set; }
 
     [JsonProperty("id")]
-    [Display("ID")]
+    [Display("Translation issue ID")]
     public string Id { get; set; }
 
     [JsonProperty("id_category")]

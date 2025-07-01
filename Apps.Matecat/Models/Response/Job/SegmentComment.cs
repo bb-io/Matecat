@@ -6,7 +6,7 @@ namespace Apps.Matecat.Models.Response.Job;
 public class SegmentComment
 {
     [JsonProperty("id")]
-    [Display("ID")]
+    [Display("Segment comment ID")]
     public string Id { get; set; }
 
     [JsonProperty("id_job")]
