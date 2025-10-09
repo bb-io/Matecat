@@ -21,7 +21,7 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 
 namespace Apps.Matecat.Actions;
 
-[ActionList]
+[ActionList("Jobs")]
 public class JobActions : BaseInvocable
 {
     #region Fields

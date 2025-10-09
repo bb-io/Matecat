@@ -11,7 +11,7 @@ using RestSharp;
 
 namespace Apps.Matecat.Actions;
 
-[ActionList]
+[ActionList("Translation issues")]
 public class TranslationIssueActions : BaseInvocable
 {
     #region Fields
