@@ -17,7 +17,7 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 
 namespace Apps.Matecat.Actions;
 
-[ActionList]
+[ActionList("Projects")]
 public class ProjectActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient)
     : BaseInvocable(invocationContext)
 {

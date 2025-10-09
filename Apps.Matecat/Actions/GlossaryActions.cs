@@ -13,7 +13,7 @@ using RestSharp;
 
 namespace Apps.Matecat.Actions;
 
-[ActionList]
+[ActionList("Glossaries")]
 public class GlossaryActions : BaseInvocable
 {
     #region Fields

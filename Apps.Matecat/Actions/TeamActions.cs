@@ -12,7 +12,7 @@ using RestSharp;
 
 namespace Apps.Matecat.Actions;
 
-[ActionList]
+[ActionList("Teams")]
 public class TeamActions : BaseInvocable
 {
     #region Fields
