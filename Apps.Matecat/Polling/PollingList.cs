@@ -1,21 +1,13 @@
 ﻿using Apps.Matecat.Constants;
-using Apps.Matecat.DataSourceHandlers.EnumDataHandlers;
 using Apps.Matecat.Models.Response.Job;
 using Apps.Matecat.Models.Response.Project;
 using Apps.Matecat.Polling.Models;
 using Apps.Matecat.RestSharp;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Authentication;
-using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Polling;
-using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Apps.Matecat.Polling;
 
@@ -32,8 +24,8 @@ public class PollingList : BaseInvocable
     }
 
     [PollingEvent("On analysis completed", "This event triggers when a project analysis completes")]
-    public async Task<PollingEventResponse<string, Project>> OnAnalysisCompleted(
-        PollingEventRequest<string> input, 
+    public async Task<PollingEventResponse<AnalysisStatusMemory, Project>> OnAnalysisCompleted(
+        PollingEventRequest<AnalysisStatusMemory> input, 
         [PollingEventParameter] ProjectIdentifier projectIdentifier)
     {
         var endpoint = $"{ApiEndpoints.Projects}/{projectIdentifier.ProjectId}";
@@ -48,13 +40,13 @@ public class PollingList : BaseInvocable
         {
             FlyBird = project.Analysis.Status == AnalysisStatus.Done || !allOkStatuses.Contains(project.Analysis.Status),
             Result = project,
-            Memory = project.Analysis.Status,
+            Memory = new AnalysisStatusMemory() { Status = project.Analysis.Status },
         };
     }
 
     [PollingEvent("On job status changed", "This event triggers when a job changes its derived status")]
-    public async Task<PollingEventResponse<string, Job>> OnJobStatusChanged(
-        PollingEventRequest<string> input,
+    public async Task<PollingEventResponse<JobDerivedStatusMemory, Job>> OnJobStatusChanged(
+        PollingEventRequest<JobDerivedStatusMemory> input,
         [PollingEventParameter] ProjectIdentifier projectIdentifier,
         [PollingEventParameter] JobIdentifier jobIdentifier,
         [PollingEventParameter] OptionalDerivedStatus derivedStatus)
@@ -71,15 +63,17 @@ public class PollingList : BaseInvocable
 
         return new()
         {
-            FlyBird = derivedStatus.DerivedStatus == null ? (input.Memory != null && job.DerivedStatus != input.Memory) : job.DerivedStatus == derivedStatus.DerivedStatus,
+            FlyBird = derivedStatus.DerivedStatus == null
+                ? (input.Memory != null && job.DerivedStatus != input.Memory.DerivedStatus)
+                : job.DerivedStatus == derivedStatus.DerivedStatus,
             Result = job,
-            Memory = job.DerivedStatus,
+            Memory = new JobDerivedStatusMemory { DerivedStatus = job.DerivedStatus },
         };
     }
 
     [PollingEvent("On project status changed", "This event triggers when a project changes its derived status")]
-    public async Task<PollingEventResponse<string, Project>> OnProjectStatusChanged(
-    PollingEventRequest<string> input,
+    public async Task<PollingEventResponse<ProjectDerivedStatusMemory, Project>> OnProjectStatusChanged(
+    PollingEventRequest<ProjectDerivedStatusMemory> input,
     [PollingEventParameter] ProjectIdentifier projectIdentifier,
     [PollingEventParameter] OptionalDerivedStatus derivedStatus)
     {
@@ -91,9 +85,11 @@ public class PollingList : BaseInvocable
 
         return new()
         {
-            FlyBird = derivedStatus.DerivedStatus == null ? (input.Memory != null && project.DerivedStatus != input.Memory) : project.DerivedStatus == derivedStatus.DerivedStatus,
+            FlyBird = derivedStatus.DerivedStatus == null
+                ? (input.Memory != null && project.DerivedStatus != input.Memory.DerivedStatus)
+                : project.DerivedStatus == derivedStatus.DerivedStatus,
             Result = project,
-            Memory = project.DerivedStatus,
+            Memory = new ProjectDerivedStatusMemory { DerivedStatus = project.DerivedStatus },
         };
     }
 }
