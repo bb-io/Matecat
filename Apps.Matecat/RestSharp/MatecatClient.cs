@@ -44,26 +44,32 @@ public class MatecatClient() : RestClient(new RestClientOptions { BaseUrl = new(
         throw ConfigureErrorException(response);
     }
 
-    private Exception ConfigureErrorException(RestResponse response)
+    private static Exception ConfigureErrorException(RestResponse response)
     {
+        string statusPart = $"Status code {(int)response.StatusCode} ({response.StatusCode.ToString()})";
+        if (string.IsNullOrWhiteSpace(response.Content))
+        {
+            string noContentErrorMessage = string.IsNullOrWhiteSpace(response.ErrorMessage) 
+                ? statusPart 
+                : $"{statusPart}: {response.ErrorMessage}";
+            return new PluginApplicationException(noContentErrorMessage);
+        }
+        
         try
         {
-            var errorsResponse = JsonConvert.DeserializeObject<ErrorsResponse>(response.Content!);
-            if (errorsResponse?.Errors is not null && errorsResponse.Errors.Any())
-                return GetMultipleErrors(errorsResponse);
+            var errorsResponse = JsonConvert.DeserializeObject<ErrorsResponse>(response.Content);
+            if (errorsResponse?.Errors is not null && errorsResponse.Errors.Count != 0)
+            {
+                var messages = errorsResponse.Errors.Select(x => x.Message).ToArray();
+                return new PluginApplicationException(string.Join("; ", messages));
+            }
 
-            var error = JsonConvert.DeserializeObject<Error>(response.Content!);
-            return new PluginApplicationException(error?.Message ?? response.StatusDescription!);
+            var error = JsonConvert.DeserializeObject<Error>(response.Content);
+            return new PluginApplicationException(error?.Message ?? statusPart);
         }
         catch (JsonException)
         {
             return new PluginApplicationException($"Unexpected error format: {response.StatusCode} - {response.Content}");
         }
-    }
-
-    private Exception GetMultipleErrors(ErrorsResponse errorsResponse)
-    {
-        var messages = errorsResponse.Errors.Select(x => x.Message).ToArray();
-        return new PluginApplicationException(string.Join(';', messages));
     }
 }
