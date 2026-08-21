@@ -46,10 +46,12 @@ public class MatecatClient() : RestClient(new RestClientOptions { BaseUrl = new(
 
     private static Exception ConfigureErrorException(RestResponse response)
     {
-        string statusPart = $"Status code {(int)response.StatusCode} ({response.StatusDescription ?? response.StatusCode.ToString()})";
+        string statusPart = $"Status code {(int)response.StatusCode} ({response.StatusCode.ToString()})";
         if (string.IsNullOrWhiteSpace(response.Content))
         {
-            string noContentErrorMessage = response.ErrorMessage is null ? statusPart : $"{statusPart}: {response.ErrorMessage}";
+            string noContentErrorMessage = string.IsNullOrWhiteSpace(response.ErrorMessage) 
+                ? statusPart 
+                : $"{statusPart}: {response.ErrorMessage}";
             return new PluginApplicationException(noContentErrorMessage);
         }
         
