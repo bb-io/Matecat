@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <Product>Matecat</Product>
     <Description>Free and open source online CAT tool</Description>
-    <Version>1.2.14</Version>
+    <Version>1.2.15</Version>
     <AssemblyName>Apps.Matecat</AssemblyName>
     <LangVersion>12</LangVersion>
   </PropertyGroup>
@@ -21,5 +21,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource CopyToOutputDirectory="Always" Include="image\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\README.md" Link="README.md" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>
